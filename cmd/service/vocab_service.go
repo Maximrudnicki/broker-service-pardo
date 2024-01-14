@@ -10,4 +10,5 @@ type VocabService interface {
 	DeleteWord(dwr request.DeleteWordRequest) error
 	GetWords(vr request.VocabRequest) ([]response.VocabResponse, error)
 	UpdateWord(uwr request.UpdateWordRequest) error
+	ManageTrainings(mtr request.ManageTrainingsRequest) error
 }

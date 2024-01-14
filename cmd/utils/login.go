@@ -4,12 +4,9 @@ import (
 	pb "broker-service/proto"
 	"context"
 	"errors"
-	"log"
 )
 
 func Login(c pb.AuthenticationServiceClient, email string, password string) (*pb.LoginResponse, error) {
-	log.Println("---Login was invoked---")
-
 	req := &pb.LoginRequest{
 		Email:    email,
 		Password: password,
@@ -20,6 +17,5 @@ func Login(c pb.AuthenticationServiceClient, email string, password string) (*pb
 		return nil, errors.New("invalid username or Password")
 	}
 
-	log.Printf("Login: %v\n", res)
 	return res, nil
 }

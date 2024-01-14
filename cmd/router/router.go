@@ -30,6 +30,7 @@ func NewRouter(
 	vocabRouter.POST("/", vocabController.CreateWord)
 	vocabRouter.DELETE("/:wordId", vocabController.DeleteWord)
 	vocabRouter.PATCH("/:wordId", vocabController.UpdateWord)
+    vocabRouter.PATCH("/:wordId/trainings", vocabController.ManageTrainings)
 
 	return router
 }

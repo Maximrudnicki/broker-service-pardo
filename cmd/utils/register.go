@@ -8,8 +8,6 @@ import (
 )
 
 func Register(c pb.AuthenticationServiceClient, username string, email string, password string) error {
-	log.Println("---Register was invoked---")
-
 	req := &pb.RegisterRequest{
 		Username: username,
 		Email: email,
@@ -22,6 +20,5 @@ func Register(c pb.AuthenticationServiceClient, username string, email string, p
 		return errors.New("Error happened while register")
 	}
 
-	log.Println("Registered")
 	return nil
 }

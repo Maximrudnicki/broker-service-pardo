@@ -79,9 +79,15 @@ func (v *VocabServiceImpl) GetWords(vr request.VocabRequest) ([]response.VocabRe
 	var vocabResponse []response.VocabResponse
 	for _, grpcResp := range gr {
 		jsonResp := response.VocabResponse{
-			ID:         grpcResp.Id,
-			Word:       grpcResp.Word,
-			Definition: grpcResp.Definition,
+			ID:              grpcResp.Id,
+			Word:            grpcResp.Word,
+			Definition:      grpcResp.Definition,
+			CreatedAt:       grpcResp.CreatedAt,
+			IsLearned:       grpcResp.IsLearned,
+			Cards:           grpcResp.Cards,
+			WordTranslation: grpcResp.WordTranslation,
+			Constructor:     grpcResp.Constructor,
+			WordAudio:       grpcResp.WordAudio,
 		}
 		vocabResponse = append(vocabResponse, jsonResp)
 	}
@@ -104,5 +110,23 @@ func (v *VocabServiceImpl) UpdateWord(uwr request.UpdateWordRequest) error {
 		return update_err
 	}
 
+	return nil
+}
+
+// ManageTrainings implements VocabService.
+func (*VocabServiceImpl) ManageTrainings(mtr request.ManageTrainingsRequest) error {
+	conn, err := grpc.Dial("0.0.0.0:50052", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatalf("Did not connect: %v", err)
+	}
+	defer conn.Close()
+
+	c := pb.NewVocabServiceClient(conn)
+
+	manage_trainings_err := u.ManageTrainings(c, mtr)
+	if manage_trainings_err != nil {
+		return manage_trainings_err
+	}
+	
 	return nil
 }

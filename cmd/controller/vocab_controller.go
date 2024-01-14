@@ -42,7 +42,7 @@ func (controller *VocabController) CreateWord(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, webResponse)
 		return
 	}
-	
+
 	err_cw := controller.vocabService.CreateWord(cwr)
 	if err_cw != nil {
 		webResponse := response.Response{
@@ -119,13 +119,13 @@ func (controller *VocabController) GetWords(ctx *gin.Context) {
 	}
 
 	res, err_words := controller.vocabService.GetWords(vocabRequest)
-	fmt.Println(err_words)
 	if err_words != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
 			Status:  "Bad Request",
 			Message: "Cannot get words",
 		}
+		log.Printf("err_words: %v", err_words)
 		ctx.JSON(http.StatusBadRequest, webResponse)
 		return
 	}
@@ -153,7 +153,7 @@ func (controller *VocabController) UpdateWord(ctx *gin.Context) {
 	id, err_id := strconv.Atoi(wordId)
 
 	uwr := request.UpdateWordRequest{
-		Token: token,
+		Token:  token,
 		WordId: uint32(id),
 	}
 	err := ctx.ShouldBindJSON(&uwr)
@@ -167,7 +167,7 @@ func (controller *VocabController) UpdateWord(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, webResponse)
 		return
 	}
-	
+
 	err_uw := controller.vocabService.UpdateWord(uwr)
 	if err_uw != nil {
 		webResponse := response.Response{
@@ -184,6 +184,57 @@ func (controller *VocabController) UpdateWord(ctx *gin.Context) {
 		Code:    200,
 		Status:  "Ok",
 		Message: "Successfully updated!",
+		Data:    nil,
+	}
+
+	ctx.JSON(http.StatusOK, webResponse)
+}
+
+func (controller *VocabController) ManageTrainings(ctx *gin.Context) {
+	authorizationHeader := ctx.GetHeader("Authorization")
+	if authorizationHeader == "" {
+		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
+		return
+	}
+
+	token := authorizationHeader[len("Bearer "):]
+
+	wordId := ctx.Param("wordId")
+	id, err_id := strconv.Atoi(wordId)
+
+	mtr := request.ManageTrainingsRequest{
+		Token:  token,
+		WordId: uint32(id),
+	}
+	err := ctx.ShouldBindJSON(&mtr)
+	if err != nil || err_id != nil {
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  "Bad Request",
+			Message: "Cannot add word",
+		}
+		log.Printf("Cannot bind JSON: %v", err)
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+	}
+
+	err_mt := controller.vocabService.ManageTrainings(mtr)
+
+	if err_mt != nil {
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  "Bad Request",
+			Message: "Cannot manage training",
+		}
+		log.Printf("Cannot manage training: %v", err_mt)
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+	}
+
+	webResponse := response.Response{
+		Code:    200,
+		Status:  "Ok",
+		Message: "Successfully managed!",
 		Data:    nil,
 	}
 

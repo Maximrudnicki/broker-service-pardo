@@ -17,7 +17,14 @@ type VocabRequest struct {
 }
 
 type UpdateWordRequest struct {
-	Token  string `json:"token"`
-	WordId uint32 `json:"word_id"`
-	Definition string `json:"definition"`	
+	Token      string `json:"token"`
+	WordId     uint32 `json:"word_id"`
+	Definition string `json:"definition"`
+}
+
+type ManageTrainingsRequest struct {
+	Token          string `json:"token"`
+	TrainingResult bool   `json:"result"`
+	Training       string `json:"training"`
+	WordId         uint32 `json:"word_id"`
 }

@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	"broker-service/cmd/data/request"
@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type 	AuthenticationController struct {
+type AuthenticationController struct {
 	authenticationService service.AuthenticationService
 }
 
@@ -27,13 +27,13 @@ func (controller *AuthenticationController) Login(ctx *gin.Context) {
 	}
 
 	token, err_token := controller.authenticationService.Login(loginRequest)
-	fmt.Println(err_token)
 	if err_token != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
 			Status:  "Bad Request",
 			Message: "Invalid username or password",
 		}
+		log.Printf("Token err: %v", err_token)
 		ctx.JSON(http.StatusBadRequest, webResponse)
 		return
 	}

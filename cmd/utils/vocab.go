@@ -6,12 +6,9 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 )
 
 func CreateWord(v pb.VocabServiceClient, cwr request.CreateWordRequest) error {
-	log.Println("---Delete was invoked---")
-
 	req := &pb.CreateRequest{
 		Token:      cwr.Token,
 		Word:       cwr.Word,
@@ -23,13 +20,10 @@ func CreateWord(v pb.VocabServiceClient, cwr request.CreateWordRequest) error {
 		return fmt.Errorf("Error happened while adding new word: %v\n", err)
 	}
 
-	log.Println("Word Created!")
 	return nil
 }
 
 func DeleteWord(v pb.VocabServiceClient, dwr request.DeleteWordRequest) error {
-	log.Println("---Delete was invoked---")
-
 	req := &pb.DeleteRequest{
 		Token:  dwr.Token,
 		WordId: dwr.WordId,
@@ -40,13 +34,10 @@ func DeleteWord(v pb.VocabServiceClient, dwr request.DeleteWordRequest) error {
 		return fmt.Errorf("Error happened while deleting the word: %v\n", err)
 	}
 
-	log.Println("Word Deleted!")
 	return nil
 }
 
 func GetWords(v pb.VocabServiceClient, token string) ([]*pb.VocabResponse, error) {
-	log.Println("---Vocab was invoked---")
-
 	var vs []*pb.VocabResponse // vocab slice
 
 	req := &pb.VocabRequest{
@@ -57,7 +48,6 @@ func GetWords(v pb.VocabServiceClient, token string) ([]*pb.VocabResponse, error
 	stream, err := v.GetWords(context.Background(), req)
 	if err != nil {
 		return nil, fmt.Errorf("Error reading from stream: %v", err)
-		// log.Fatalf("Error happened while reading vocablary: %v\n", err)
 	}
 
 	for {
@@ -69,7 +59,6 @@ func GetWords(v pb.VocabServiceClient, token string) ([]*pb.VocabResponse, error
 
 		if err != nil {
 			return nil, fmt.Errorf("Something happened with stream %v\n", err)
-			// log.Fatalf("Something happened: %v\n", err)
 		}
 
 		vs = append(vs, res)
@@ -79,8 +68,6 @@ func GetWords(v pb.VocabServiceClient, token string) ([]*pb.VocabResponse, error
 }
 
 func UpdateWord(v pb.VocabServiceClient, uwr request.UpdateWordRequest) error {
-	log.Println("---Update was invoked---")
-
 	req := &pb.UpdateRequest{
 		Token:      uwr.Token,
 		Id:         uwr.WordId,
@@ -92,6 +79,21 @@ func UpdateWord(v pb.VocabServiceClient, uwr request.UpdateWordRequest) error {
 		return fmt.Errorf("Error happened while updating the word: %v\n", err)
 	}
 
-	log.Println("Word Updated!")
+	return nil
+}
+
+func ManageTrainings(v pb.VocabServiceClient, mtr request.ManageTrainingsRequest) error {
+	req := &pb.ManageTrainingsRequest{
+		Token:    mtr.Token,
+		Training: mtr.Training,
+		Res:      mtr.TrainingResult,
+		Id:       mtr.WordId,
+	}
+
+	_, err := v.ManageTrainings(context.Background(), req)
+	if err != nil {
+		return fmt.Errorf("Error happened while managing trainings the word: %v\n", err)
+	}
+
 	return nil
 }
