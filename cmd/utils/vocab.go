@@ -82,6 +82,22 @@ func UpdateWord(v pb.VocabServiceClient, uwr request.UpdateWordRequest) error {
 	return nil
 }
 
+
+func UpdateWordStatus(v pb.VocabServiceClient, uwsr request.UpdateWordStatusRequest) error {
+	req := &pb.UpdateStatusRequest{
+		Token:     uwsr.Token,
+		IsLearned: uwsr.IsLearned,
+		Id:        uwsr.WordId,
+	}
+
+	_, err := v.UpdateWordStatus(context.Background(), req)
+	if err != nil {
+		return fmt.Errorf("Error happened while updating the word: %v\n", err)
+	}
+
+	return nil
+}
+
 func ManageTrainings(v pb.VocabServiceClient, mtr request.ManageTrainingsRequest) error {
 	req := &pb.ManageTrainingsRequest{
 		Token:    mtr.Token,

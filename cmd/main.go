@@ -15,8 +15,6 @@ import (
 
 const (
 	webPort   = "8000"
-	gRpcPort  = "0.0.0.0:50051"
-	gRpcPort2 = "0.0.0.0:50052"
 )
 
 func main() {
@@ -33,7 +31,7 @@ func main() {
 	r := router.NewRouter(authenticationController, vocabController)
 
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://127.0.0.1:5500", "http://localhost:8082", "http://192.168.50.77:8082"},
+		AllowedOrigins:   []string{"http://localhost:8080", "http://127.0.0.1:8080"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
 		AllowedHeaders:   []string{"Access-Control-Allow-Origin", "Accept", "Authorization", "Content-Type", "X-CSRF-Token", "Origin"},
 		AllowCredentials: true,

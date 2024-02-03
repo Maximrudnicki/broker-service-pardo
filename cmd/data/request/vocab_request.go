@@ -22,6 +22,12 @@ type UpdateWordRequest struct {
 	Definition string `json:"definition"`
 }
 
+type UpdateWordStatusRequest struct {
+	Token     string `json:"token"`
+	WordId    uint32 `json:"word_id"`
+	IsLearned bool   `json:"is_learned"`
+}
+
 type ManageTrainingsRequest struct {
 	Token          string `json:"token"`
 	TrainingResult bool   `json:"result"`

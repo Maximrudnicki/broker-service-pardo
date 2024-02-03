@@ -161,7 +161,7 @@ func (controller *VocabController) UpdateWord(ctx *gin.Context) {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
 			Status:  "Bad Request",
-			Message: "Cannot add word",
+			Message: "Cannot update word",
 		}
 		log.Printf("Cannot bind JSON: %v", err)
 		ctx.JSON(http.StatusBadRequest, webResponse)
@@ -184,6 +184,57 @@ func (controller *VocabController) UpdateWord(ctx *gin.Context) {
 		Code:    200,
 		Status:  "Ok",
 		Message: "Successfully updated!",
+		Data:    nil,
+	}
+
+	ctx.JSON(http.StatusOK, webResponse)
+}
+
+func (controller *VocabController) UpdateWordStatus(ctx *gin.Context) {
+	authorizationHeader := ctx.GetHeader("Authorization")
+	if authorizationHeader == "" {
+		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
+		return
+	}
+
+	token := authorizationHeader[len("Bearer "):]
+
+	wordId := ctx.Param("wordId")
+	id, err_id := strconv.Atoi(wordId)
+
+	uwsr := request.UpdateWordStatusRequest{
+		Token:  token,
+		WordId: uint32(id),
+	}
+	err := ctx.ShouldBindJSON(&uwsr)
+	if err != nil || err_id != nil {
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  "Bad Request",
+			Message: "Cannot update status",
+		}
+		log.Printf("Cannot bind JSON: %v", err)
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+	}
+
+	err_uws := controller.vocabService.UpdateWordStatus(uwsr)
+
+	if err_uws != nil {
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  "Bad Request",
+			Message: "Cannot update status",
+		}
+		log.Printf("Cannot update status: %v", err_uws)
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+	}
+
+	webResponse := response.Response{
+		Code:    200,
+		Status:  "Ok",
+		Message: "Status successfully updated!",
 		Data:    nil,
 	}
 

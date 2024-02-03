@@ -8,6 +8,10 @@ message UpdateRequest {
     uint32 id = 1;
     string definition = 2;
     string token = 3;
-    // string word = 4;
 }
 
+message UpdateStatusRequest {
+    uint32 id = 1;
+    bool is_learned = 2;
+    string token = 3;
+}

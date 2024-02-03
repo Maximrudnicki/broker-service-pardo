@@ -113,6 +113,24 @@ func (v *VocabServiceImpl) UpdateWord(uwr request.UpdateWordRequest) error {
 	return nil
 }
 
+// UpdateWordStatus implements VocabService
+func (v *VocabServiceImpl) UpdateWordStatus(uwsr request.UpdateWordStatusRequest) error {
+	conn, err := grpc.Dial("0.0.0.0:50052", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatalf("Did not connect: %v", err)
+	}
+	defer conn.Close()
+
+	c := pb.NewVocabServiceClient(conn)
+
+	update_err := u.UpdateWordStatus(c, uwsr)
+	if update_err != nil {
+		return update_err
+	}
+
+	return nil
+}
+
 // ManageTrainings implements VocabService.
 func (*VocabServiceImpl) ManageTrainings(mtr request.ManageTrainingsRequest) error {
 	conn, err := grpc.Dial("0.0.0.0:50052", grpc.WithTransportCredentials(insecure.NewCredentials()))
