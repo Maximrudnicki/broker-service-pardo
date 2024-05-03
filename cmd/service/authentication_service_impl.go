@@ -28,7 +28,7 @@ func (a *AuthenticationServiceImpl) Login(user request.LoginRequest) (string, er
 	// connect to auth service as a client
 	conn, err := grpc.Dial("0.0.0.0:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("Did not connect: %v", err)
+		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
 
@@ -47,14 +47,14 @@ func (a *AuthenticationServiceImpl) Register(user request.CreateUserRequest) err
 	// connect to auth service as a client
 	conn, err := grpc.Dial("0.0.0.0:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("Did not connect: %v", err)
+		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
 	c := pb.NewAuthenticationServiceClient(conn)
 	
 	register_err := u.Register(c, user.Username, user.Email, user.Password)
 	if register_err != nil {
-		return errors.New("Cannot register")
+		return errors.New("cannot register")
 	}
 
 	return nil

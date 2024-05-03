@@ -28,7 +28,7 @@ func NewVocabServiceImpl(validate *validator.Validate) VocabService {
 func (v *VocabServiceImpl) CreateWord(cwr request.CreateWordRequest) error {
 	conn, err := grpc.Dial("0.0.0.0:50052", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("Did not connect: %v", err)
+		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
 
@@ -46,7 +46,7 @@ func (v *VocabServiceImpl) CreateWord(cwr request.CreateWordRequest) error {
 func (v *VocabServiceImpl) DeleteWord(dwr request.DeleteWordRequest) error {
 	conn, err := grpc.Dial("0.0.0.0:50052", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("Did not connect: %v", err)
+		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
 
@@ -64,7 +64,7 @@ func (v *VocabServiceImpl) DeleteWord(dwr request.DeleteWordRequest) error {
 func (v *VocabServiceImpl) GetWords(vr request.VocabRequest) ([]response.VocabResponse, error) {
 	conn, err := grpc.Dial("0.0.0.0:50052", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("Did not connect: %v", err)
+		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
 
@@ -72,7 +72,7 @@ func (v *VocabServiceImpl) GetWords(vr request.VocabRequest) ([]response.VocabRe
 
 	gr, err := u.GetWords(c, vr.Token)
 	if err != nil {
-		return nil, errors.New("Cannot get words")
+		return nil, errors.New("cannot get words")
 	}
 
 	// gr - gRPC Response, vocabResponse - JSON format
@@ -99,7 +99,7 @@ func (v *VocabServiceImpl) GetWords(vr request.VocabRequest) ([]response.VocabRe
 func (v *VocabServiceImpl) UpdateWord(uwr request.UpdateWordRequest) error {
 	conn, err := grpc.Dial("0.0.0.0:50052", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("Did not connect: %v", err)
+		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
 
@@ -117,7 +117,7 @@ func (v *VocabServiceImpl) UpdateWord(uwr request.UpdateWordRequest) error {
 func (v *VocabServiceImpl) UpdateWordStatus(uwsr request.UpdateWordStatusRequest) error {
 	conn, err := grpc.Dial("0.0.0.0:50052", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("Did not connect: %v", err)
+		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
 
@@ -135,7 +135,7 @@ func (v *VocabServiceImpl) UpdateWordStatus(uwsr request.UpdateWordStatusRequest
 func (*VocabServiceImpl) ManageTrainings(mtr request.ManageTrainingsRequest) error {
 	conn, err := grpc.Dial("0.0.0.0:50052", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("Did not connect: %v", err)
+		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
 

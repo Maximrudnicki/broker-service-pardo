@@ -9,7 +9,8 @@ import (
 
 func NewRouter(
 	authenticationController *controller.AuthenticationController,
-	vocabController *controller.VocabController) *gin.Engine {
+	vocabController *controller.VocabController,
+	groupController *controller.GroupController) *gin.Engine {
 	router := gin.Default()
 
 	router.GET("", func(context *gin.Context) {
@@ -25,6 +26,9 @@ func NewRouter(
 	authenticationRouter.POST("/login/", authenticationController.Login)
 	authenticationRouter.POST("/register", authenticationController.Register)
 	
+	groupRouter := r.Group("/group")
+	groupRouter.POST("/", groupController.CreateGroup)
+
 	vocabRouter := r.Group("/vocab")
 	vocabRouter.GET("/", vocabController.GetWords)
 	vocabRouter.POST("/", vocabController.CreateWord)

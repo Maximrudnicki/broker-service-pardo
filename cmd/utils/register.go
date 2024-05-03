@@ -16,8 +16,8 @@ func Register(c pb.AuthenticationServiceClient, username string, email string, p
 	
 	_, err := c.Register(context.Background(), req)
 	if err != nil {
-		log.Printf("Error happened while register: %v\n", err)
-		return errors.New("Error happened while register")
+		log.Printf("error happened while register: %v", err)
+		return errors.New("error happened while register")
 	}
 
 	return nil

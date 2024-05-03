@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	webPort   = "8000"
+	webPort = "8000"
 )
 
 func main() {
@@ -23,12 +23,14 @@ func main() {
 	//Init Services
 	authenticationService := service.NewAuthenticationServiceImpl(validate)
 	vocabService := service.NewVocabServiceImpl(validate)
+	groupService := service.NewGroupServiceImpl(validate)
 
 	//Init controllers
 	authenticationController := controller.NewAuthenticationController(authenticationService)
 	vocabController := controller.NewVocabController(vocabService)
+	groupController := controller.NewGroupController(groupService)
 
-	r := router.NewRouter(authenticationController, vocabController)
+	r := router.NewRouter(authenticationController, vocabController, groupController)
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:8080", "http://127.0.0.1:8080"},

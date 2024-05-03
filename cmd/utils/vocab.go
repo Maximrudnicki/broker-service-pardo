@@ -17,7 +17,7 @@ func CreateWord(v pb.VocabServiceClient, cwr request.CreateWordRequest) error {
 
 	_, err := v.CreateWord(context.Background(), req)
 	if err != nil {
-		return fmt.Errorf("Error happened while adding new word: %v\n", err)
+		return fmt.Errorf("error happened while adding new word: %v", err)
 	}
 
 	return nil
@@ -31,7 +31,7 @@ func DeleteWord(v pb.VocabServiceClient, dwr request.DeleteWordRequest) error {
 
 	_, err := v.DeleteWord(context.Background(), req)
 	if err != nil {
-		return fmt.Errorf("Error happened while deleting the word: %v\n", err)
+		return fmt.Errorf("error happened while deleting the word: %v", err)
 	}
 
 	return nil
@@ -47,7 +47,7 @@ func GetWords(v pb.VocabServiceClient, token string) ([]*pb.VocabResponse, error
 
 	stream, err := v.GetWords(context.Background(), req)
 	if err != nil {
-		return nil, fmt.Errorf("Error reading from stream: %v", err)
+		return nil, fmt.Errorf("error reading from stream: %v", err)
 	}
 
 	for {
@@ -58,7 +58,7 @@ func GetWords(v pb.VocabServiceClient, token string) ([]*pb.VocabResponse, error
 		}
 
 		if err != nil {
-			return nil, fmt.Errorf("Something happened with stream %v\n", err)
+			return nil, fmt.Errorf("something happened with stream %v", err)
 		}
 
 		vs = append(vs, res)
@@ -76,7 +76,7 @@ func UpdateWord(v pb.VocabServiceClient, uwr request.UpdateWordRequest) error {
 
 	_, err := v.UpdateWord(context.Background(), req)
 	if err != nil {
-		return fmt.Errorf("Error happened while updating the word: %v\n", err)
+		return fmt.Errorf("error happened while updating the word: %v", err)
 	}
 
 	return nil
@@ -92,7 +92,7 @@ func UpdateWordStatus(v pb.VocabServiceClient, uwsr request.UpdateWordStatusRequ
 
 	_, err := v.UpdateWordStatus(context.Background(), req)
 	if err != nil {
-		return fmt.Errorf("Error happened while updating the word: %v\n", err)
+		return fmt.Errorf("error happened while updating the word: %v", err)
 	}
 
 	return nil
@@ -108,7 +108,7 @@ func ManageTrainings(v pb.VocabServiceClient, mtr request.ManageTrainingsRequest
 
 	_, err := v.ManageTrainings(context.Background(), req)
 	if err != nil {
-		return fmt.Errorf("Error happened while managing trainings the word: %v\n", err)
+		return fmt.Errorf("error happened while managing trainings the word: %v", err)
 	}
 
 	return nil
