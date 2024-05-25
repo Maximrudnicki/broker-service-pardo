@@ -22,6 +22,23 @@ func AddStudent(g pb.GroupServiceClient, asr request.AddStudentRequest) error {
 	return nil
 }
 
+func AddWordToUser(g pb.GroupServiceClient, awur request.AddWordToUserRequest) (*pb.AddWordToUserResponse, error) {
+	req := &pb.AddWordToUserRequest{
+		Word: awur.Word,
+		Definition: awur.Definition,
+		GroupId: awur.GroupId,
+		UserId: awur.UserId,
+		Token: awur.Token,
+	}
+
+	res, err := g.AddWordToUser(context.Background(), req)
+	if err != nil {
+		return nil, fmt.Errorf("error happened while adding student to the group: %v", err)
+	}
+
+	return res, nil
+}
+
 func CreateGroup(g pb.GroupServiceClient, cgr request.CreateGroupRequest) error {
 	req := &pb.CreateGroupRequest{
 		Title:        cgr.Title,
@@ -62,6 +79,21 @@ func FindGroup(g pb.GroupServiceClient, dgr request.FindGroupRequest) (*pb.Group
 	}
 
 	return group, nil
+}
+
+func FindStudent(g pb.GroupServiceClient, fsr request.FindStudentRequest) (*pb.StudentResponse, error) {
+	req := &pb.FindStudentRequest{
+		Token: fsr.Token,
+		StudentId: fsr.StudentId,
+		GroupId: fsr.GroupId,
+	}
+
+	student, err := g.FindStudent(context.Background(), req)
+	if err != nil {
+		return nil, fmt.Errorf("error happened: %v", err)
+	}
+
+	return student, nil
 }
 
 func FindGroupsTeacher(g pb.GroupServiceClient, fgtr request.FindGroupsTeacherRequest) ([]*pb.GroupResponse, error) {

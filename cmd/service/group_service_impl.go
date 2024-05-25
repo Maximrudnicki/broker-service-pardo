@@ -36,6 +36,32 @@ func (*GroupServiceImpl) AddStudent(asr request.AddStudentRequest) error {
 	return nil
 }
 
+// AddWordToUser implements GroupService.
+func (*GroupServiceImpl) AddWordToUser(awur request.AddWordToUserRequest) (response.AddWordToUserResponse, error) {
+	conn, err := grpc.Dial("0.0.0.0:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+
+	c := pb.NewGroupServiceClient(conn)
+
+	var addWordToUserResponse response.AddWordToUserResponse
+
+	res, err := u.AddWordToUser(c, awur)
+	if err != nil {
+		return addWordToUserResponse, errors.New("cannot add word")
+	}
+
+	jsonResp := response.AddWordToUserResponse{
+		WordId: res.WordId,
+	}
+
+	addWordToUserResponse = jsonResp
+
+	return addWordToUserResponse, nil
+}
+
 // CreateGroup implements GroupService
 func (g *GroupServiceImpl) CreateGroup(cgr request.CreateGroupRequest) error {
 	// connect to group service as a client
@@ -99,6 +125,33 @@ func (*GroupServiceImpl) FindGroup(fgr request.FindGroupRequest) (response.Group
 	groupResponse = jsonResp
 
 	return groupResponse, nil
+}
+
+// FindGroup implements GroupService.
+func (*GroupServiceImpl) FindStudent(fsr request.FindStudentRequest) (response.StudentResponse, error) {
+	conn, err := grpc.Dial("0.0.0.0:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+
+	c := pb.NewGroupServiceClient(conn)
+
+	var studentResponse response.StudentResponse
+
+	sr, err := u.FindStudent(c, fsr)
+	if err != nil {
+		return studentResponse, errors.New("cannot find student")
+	}
+
+	jsonResp := response.StudentResponse{
+		Email: sr.Email,
+		Username: sr.Username,
+	}
+
+	studentResponse = jsonResp
+
+	return studentResponse, nil
 }
 
 // FindGroupsStudent implements GroupService.

@@ -27,7 +27,15 @@ func NewRouter(
 	authenticationRouter.POST("/register", authenticationController.Register)
 	
 	groupRouter := r.Group("/group")
+	groupRouter.POST("/add", groupController.AddStudent)
+	groupRouter.POST("/add_word", groupController.AddWordToUser)
 	groupRouter.POST("/", groupController.CreateGroup)
+	groupRouter.DELETE("/:groupId", groupController.DeleteGroup)
+	groupRouter.POST("/find", groupController.FindGroup)
+	groupRouter.GET("/find_teacher", groupController.FindGroupsTeacher)
+	groupRouter.GET("/find_student", groupController.FindGroupsStudent)
+	groupRouter.POST("/find_student_info", groupController.FindStudent)
+	groupRouter.PATCH("/remove", groupController.RemoveStudent)
 
 	vocabRouter := r.Group("/vocab")
 	vocabRouter.GET("/", vocabController.GetWords)
