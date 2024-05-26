@@ -60,6 +60,40 @@ func (v *VocabServiceImpl) DeleteWord(dwr request.DeleteWordRequest) error {
 	return nil
 }
 
+// DeleteWord implements VocabService
+func (v *VocabServiceImpl) FindWord(fwr request.FindWordRequest) (response.VocabResponse, error) {
+	conn, err := grpc.Dial("0.0.0.0:50052", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+
+	c := pb.NewVocabServiceClient(conn)
+
+	var findWordReponse response.VocabResponse
+
+	word, fw_err := u.FindWord(c, fwr)
+	if fw_err != nil {
+		return findWordReponse, fw_err
+	}
+
+	jsonResp := response.VocabResponse{
+		ID:              word.Id,
+		Word:            word.Word,
+		Definition:      word.Definition,
+		CreatedAt:       word.CreatedAt,
+		IsLearned:       word.IsLearned,
+		Cards:           word.Cards,
+		WordTranslation: word.WordTranslation,
+		Constructor:     word.Constructor,
+		WordAudio:       word.WordAudio,
+	}
+
+	findWordReponse = jsonResp
+
+	return findWordReponse, nil
+}
+
 // GetWords implements VocabService
 func (v *VocabServiceImpl) GetWords(vr request.VocabRequest) ([]response.VocabResponse, error) {
 	conn, err := grpc.Dial("0.0.0.0:50052", grpc.WithTransportCredentials(insecure.NewCredentials()))

@@ -11,6 +11,10 @@ type DeleteWordRequest struct {
 	WordId uint32 `json:"word_id"`
 }
 
+type FindWordRequest struct {
+	WordId uint32 `json:"word_id"`
+}
+
 type VocabRequest struct {
 	TokenType string `json:"token_type"` // Bearer
 	Token     string `json:"token"`

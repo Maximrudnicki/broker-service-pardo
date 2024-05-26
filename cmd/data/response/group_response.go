@@ -11,6 +11,14 @@ type StudentResponse struct {
 	Username string `json:"username"`
 }
 
+type StatisticsResponse struct {
+	StatId  string `json:"statistics_id"`
+	GroupId string `json:"group_id"`
+	TeacherId uint32 `json:"teacher_id"`
+	StudentId uint32 `json:"student_id"`
+	Words []uint32 `json:"words"`
+}
+
 type AddWordToUserResponse struct {
 	WordId uint32 `json:"word_id"`
 }

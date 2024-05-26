@@ -28,7 +28,7 @@ func main() {
 	//Init controllers
 	authenticationController := controller.NewAuthenticationController(authenticationService)
 	vocabController := controller.NewVocabController(vocabService)
-	groupController := controller.NewGroupController(groupService)
+	groupController := controller.NewGroupController(groupService, vocabService)
 
 	r := router.NewRouter(authenticationController, vocabController, groupController)
 

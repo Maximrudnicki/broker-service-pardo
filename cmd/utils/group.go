@@ -154,6 +154,21 @@ func FindGroupsStudent(g pb.GroupServiceClient, fgsr request.FindGroupsStudentRe
 	return grs, nil
 }
 
+func GetStatistics(g pb.GroupServiceClient, gsr request.GetStatisticsRequest) (*pb.StatisticsResponse, error) {
+	req := &pb.GetStatisticsRequest{
+		StudentId: gsr.StudentId,
+		GroupId: gsr.GroupId,
+		Token: gsr.Token,
+	}
+
+	res, err := g.GetStatistics(context.Background(), req)
+	if err != nil {
+		return nil, fmt.Errorf("error happened: %v", err)
+	}
+
+	return res, nil
+}
+
 func RemoveStudent(g pb.GroupServiceClient, rsr request.RemoveStudentRequest) error {
 	req := &pb.RemoveStudentRequest{
 		Token: rsr.Token,

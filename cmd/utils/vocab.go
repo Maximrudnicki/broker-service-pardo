@@ -23,6 +23,19 @@ func CreateWord(v pb.VocabServiceClient, cwr request.CreateWordRequest) error {
 	return nil
 }
 
+func FindWord(v pb.VocabServiceClient, fwr request.FindWordRequest) (*pb.VocabResponse, error) {
+	req := &pb.WordRequest{
+		WordId: fwr.WordId,
+	}
+
+	word, err := v.FindWord(context.Background(), req)
+	if err != nil {
+		return nil, fmt.Errorf("error happened while finding the word: %v", err)
+	}
+
+	return word, nil
+}
+
 func DeleteWord(v pb.VocabServiceClient, dwr request.DeleteWordRequest) error {
 	req := &pb.DeleteRequest{
 		Token:  dwr.Token,

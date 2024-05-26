@@ -13,10 +13,11 @@ import (
 
 type GroupController struct {
 	groupService service.GroupService
+	vocabService service.VocabService
 }
 
-func NewGroupController(service service.GroupService) *GroupController {
-	return &GroupController{groupService: service}
+func NewGroupController(service service.GroupService, vs service.VocabService) *GroupController {
+	return &GroupController{groupService: service, vocabService: vs}
 }
 
 func (controller *GroupController) AddStudent(ctx *gin.Context) {
@@ -40,7 +41,7 @@ func (controller *GroupController) AddStudent(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, webResponse)
 		return
 	}
-	
+
 	err_as := controller.groupService.AddStudent(asr)
 	if err_as != nil {
 		webResponse := response.Response{
@@ -305,6 +306,73 @@ func (controller *GroupController) FindGroupsStudent(ctx *gin.Context) {
 		Code:    200,
 		Status:  "Ok",
 		Message: "Successfully found groups!",
+		Data:    res,
+	}
+
+	ctx.JSON(http.StatusOK, webResponse)
+}
+
+func (controller *GroupController) GetStatistics(ctx *gin.Context) {
+	authorizationHeader := ctx.GetHeader("Authorization")
+	if authorizationHeader == "" {
+		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
+		return
+	}
+
+	token := authorizationHeader[len("Bearer "):]
+
+	gsr := request.GetStatisticsRequest{Token: token}
+	ctx.ShouldBindJSON(&gsr)
+
+	StatResp, err_gs := controller.groupService.GetStatistics(gsr)
+	if err_gs != nil {
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  "Bad Request",
+			Message: "Cannot get stats",
+		}
+		log.Printf("Cannot get stats: %v", err_gs)
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+	}
+
+	words := make([]response.VocabResponse, 0, len(StatResp.Words))
+	for _, wordId := range StatResp.Words {
+		fwr := request.FindWordRequest{
+			WordId: wordId,
+		}
+		word, err := controller.vocabService.FindWord(fwr)
+		if err != nil {
+			webResponse := response.Response{
+				Code:    http.StatusInternalServerError,
+				Status:  "Internal Server Error",
+				Message: "Cannot find word",
+			}
+			log.Printf("Cannot find word with id %d: %v", wordId, err)
+			ctx.JSON(http.StatusInternalServerError, webResponse)
+			return
+		}
+		words = append(words, word)
+	}
+
+	res := struct {
+		StatId    string                   `json:"statistics_id"`
+		GroupId   string                   `json:"group_id"`
+		TeacherId uint32                   `json:"teacher_id"`
+		StudentId uint32                   `json:"student_id"`
+		Words     []response.VocabResponse `json:"words"`
+	}{
+		StatId:    StatResp.StatId,
+		GroupId:   StatResp.GroupId,
+		TeacherId: StatResp.TeacherId,
+		StudentId: StatResp.StudentId,
+		Words:     words,
+	}
+
+	webResponse := response.Response{
+		Code:    200,
+		Status:  "Ok",
+		Message: "Successfully found student!",
 		Data:    res,
 	}
 

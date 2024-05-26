@@ -42,6 +42,12 @@ type FindGroupsStudentRequest struct {
 	Token string `json:"token"`
 }
 
+type GetStatisticsRequest struct {
+	Token     string `json:"token"`
+	GroupId   string `json:"group_id"`
+	StudentId uint32 `json:"student_id"`
+}
+
 type RemoveStudentRequest struct {
 	Token   string `json:"token"`
 	GroupId string `json:"group_id"`

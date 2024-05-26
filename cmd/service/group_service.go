@@ -14,5 +14,6 @@ type GroupService interface {
 	FindStudent(fsr request.FindStudentRequest) (response.StudentResponse, error)
 	FindGroupsTeacher(fgtr request.FindGroupsTeacherRequest) ([]response.GroupResponse , error)
 	FindGroupsStudent(fgsr request.FindGroupsStudentRequest) ([]response.GroupResponse , error)
+	GetStatistics(gsr request.GetStatisticsRequest) (response.StatisticsResponse, error)
 	RemoveStudent(rsr request.RemoveStudentRequest) error
 }

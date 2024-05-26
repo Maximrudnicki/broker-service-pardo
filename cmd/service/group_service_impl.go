@@ -212,6 +212,36 @@ func (*GroupServiceImpl) FindGroupsTeacher(fgtr request.FindGroupsTeacherRequest
 	return groupResponse, nil
 }
 
+// GetStatistics implements GroupService.
+func (*GroupServiceImpl) GetStatistics(gsr request.GetStatisticsRequest) (response.StatisticsResponse, error) {
+	conn, err := grpc.Dial("0.0.0.0:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+
+	c := pb.NewGroupServiceClient(conn)
+
+	var statisticsResponse response.StatisticsResponse
+
+	statResponse, err := u.GetStatistics(c, gsr)
+	if err != nil {
+		return statisticsResponse, errors.New("something went wrong")
+	}
+
+	jsonResp := response.StatisticsResponse{
+		StatId: statResponse.StatId,
+		GroupId: statResponse.GroupId,
+		TeacherId: statResponse.TeacherId,
+		StudentId: statResponse.StudentId,
+		Words: statResponse.Words,
+	}
+
+	statisticsResponse = jsonResp
+
+	return statisticsResponse, nil
+}
+
 // RemoveStudent implements GroupService.
 func (*GroupServiceImpl) RemoveStudent(rsr request.RemoveStudentRequest) error {
 	conn, err := grpc.Dial("0.0.0.0:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))

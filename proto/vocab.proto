@@ -7,6 +7,7 @@ option go_package = "broker-service/proto";
 import "create_word.proto";
 import "delete_word.proto";
 import "update_word.proto";
+import "find_word.proto";
 import "manage_trainings.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
@@ -35,5 +36,6 @@ service VocabService {
     rpc UpdateWord(UpdateRequest) returns (google.protobuf.Empty);
     rpc UpdateWordStatus(UpdateStatusRequest) returns (google.protobuf.Empty);
     rpc ManageTrainings(ManageTrainingsRequest) returns (google.protobuf.Empty);
-    rpc GetWords(VocabRequest) returns (stream VocabResponse);    
+    rpc GetWords(VocabRequest) returns (stream VocabResponse);
+    rpc FindWord(WordRequest) returns (VocabResponse);
 }
