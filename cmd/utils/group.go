@@ -96,6 +96,20 @@ func FindStudent(g pb.GroupServiceClient, fsr request.FindStudentRequest) (*pb.S
 	return student, nil
 }
 
+func FindTeacher(g pb.GroupServiceClient, ftr request.FindTeacherRequest) (*pb.TeacherResponse, error) {
+	req := &pb.FindTeacherRequest{
+		Token: ftr.Token,
+		GroupId: ftr.GroupId,
+	}
+
+	teacher, err := g.FindTeacher(context.Background(), req)
+	if err != nil {
+		return nil, fmt.Errorf("error happened: %v", err)
+	}
+
+	return teacher, nil
+}
+
 func FindGroupsTeacher(g pb.GroupServiceClient, fgtr request.FindGroupsTeacherRequest) ([]*pb.GroupResponse, error) {
 	req := &pb.FindGroupsTeacherRequest{
 		Token: fgtr.Token,

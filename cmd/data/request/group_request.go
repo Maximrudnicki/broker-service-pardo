@@ -34,6 +34,11 @@ type FindStudentRequest struct {
 	GroupId   string `json:"group_id"`
 }
 
+type FindTeacherRequest struct {
+	Token     string `json:"token"`
+	GroupId   string `json:"group_id"`
+}
+
 type FindGroupsTeacherRequest struct {
 	Token string `json:"token"`
 }

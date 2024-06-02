@@ -117,6 +117,7 @@ func (*GroupServiceImpl) FindGroup(fgr request.FindGroupRequest) (response.Group
 	}
 
 	jsonResp := response.GroupResponse{
+		UserId:   gr.UserId,
 		GroupId:  gr.GroupId,
 		Title:    gr.Title,
 		Students: gr.Students,
@@ -127,7 +128,7 @@ func (*GroupServiceImpl) FindGroup(fgr request.FindGroupRequest) (response.Group
 	return groupResponse, nil
 }
 
-// FindGroup implements GroupService.
+// FindStudent implements GroupService.
 func (*GroupServiceImpl) FindStudent(fsr request.FindStudentRequest) (response.StudentResponse, error) {
 	conn, err := grpc.Dial("0.0.0.0:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
@@ -145,13 +146,41 @@ func (*GroupServiceImpl) FindStudent(fsr request.FindStudentRequest) (response.S
 	}
 
 	jsonResp := response.StudentResponse{
-		Email: sr.Email,
+		Email:    sr.Email,
 		Username: sr.Username,
 	}
 
 	studentResponse = jsonResp
 
 	return studentResponse, nil
+}
+
+// FindTeacher implements GroupService.
+func (*GroupServiceImpl) FindTeacher(ftr request.FindTeacherRequest) (response.TeacherResponse, error) {
+	conn, err := grpc.Dial("0.0.0.0:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+
+	c := pb.NewGroupServiceClient(conn)
+
+	var teacherResponse response.TeacherResponse
+
+	tr, err := u.FindTeacher(c, ftr)
+	if err != nil {
+		return teacherResponse, errors.New("cannot find teacher")
+	}
+
+	jsonResp := response.TeacherResponse{
+		TeacherId: tr.TeacherId,
+		Email:     tr.Email,
+		Username:  tr.Username,
+	}
+
+	teacherResponse = jsonResp
+
+	return teacherResponse, nil
 }
 
 // FindGroupsStudent implements GroupService.
@@ -173,6 +202,7 @@ func (*GroupServiceImpl) FindGroupsStudent(fgsr request.FindGroupsStudentRequest
 	var groupResponse []response.GroupResponse
 	for _, grpcResp := range ggr {
 		jsonResp := response.GroupResponse{
+			UserId:   grpcResp.UserId,
 			GroupId:  grpcResp.GroupId,
 			Title:    grpcResp.Title,
 			Students: grpcResp.Students,
@@ -202,6 +232,7 @@ func (*GroupServiceImpl) FindGroupsTeacher(fgtr request.FindGroupsTeacherRequest
 	var groupResponse []response.GroupResponse
 	for _, grpcResp := range ggr {
 		jsonResp := response.GroupResponse{
+			UserId:   grpcResp.UserId,
 			GroupId:  grpcResp.GroupId,
 			Title:    grpcResp.Title,
 			Students: grpcResp.Students,
@@ -230,11 +261,11 @@ func (*GroupServiceImpl) GetStatistics(gsr request.GetStatisticsRequest) (respon
 	}
 
 	jsonResp := response.StatisticsResponse{
-		StatId: statResponse.StatId,
-		GroupId: statResponse.GroupId,
+		StatId:    statResponse.StatId,
+		GroupId:   statResponse.GroupId,
 		TeacherId: statResponse.TeacherId,
 		StudentId: statResponse.StudentId,
-		Words: statResponse.Words,
+		Words:     statResponse.Words,
 	}
 
 	statisticsResponse = jsonResp

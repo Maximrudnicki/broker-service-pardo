@@ -190,7 +190,7 @@ func (controller *GroupController) FindGroup(ctx *gin.Context) {
 	fgr := request.FindGroupRequest{Token: token}
 	ctx.ShouldBindJSON(&fgr)
 
-	res, err_fg := controller.groupService.FindGroup(fgr)
+	groupResponse, err_fg := controller.groupService.FindGroup(fgr)
 	if err_fg != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -200,6 +200,84 @@ func (controller *GroupController) FindGroup(ctx *gin.Context) {
 		log.Printf("Cannot finds group: %v", err_fg)
 		ctx.JSON(http.StatusBadRequest, webResponse)
 		return
+	}
+
+	students := make([]response.StudentInformation, 0, len(groupResponse.Students))
+	for _, studentId := range groupResponse.Students {
+		fsr := request.FindStudentRequest{
+			Token:     token,
+			StudentId: studentId,
+			GroupId:   fgr.GroupId,
+		}
+		gsr := request.GetStatisticsRequest{
+			Token:     token,
+			StudentId: studentId,
+			GroupId:   fgr.GroupId,
+		}
+
+		StatResp, err_gs := controller.groupService.GetStatistics(gsr)
+		if err_gs != nil {
+			webResponse := response.Response{
+				Code:    http.StatusBadRequest,
+				Status:  "Bad Request",
+				Message: "Cannot get stats",
+			}
+			log.Printf("Cannot get stats: %v", err_gs)
+			ctx.JSON(http.StatusBadRequest, webResponse)
+			return
+		}
+
+		words := make([]response.VocabResponse, 0, len(StatResp.Words))
+		for _, wordId := range StatResp.Words {
+			fwr := request.FindWordRequest{
+				WordId: wordId,
+			}
+			word, err := controller.vocabService.FindWord(fwr)
+			if err != nil {
+				webResponse := response.Response{
+					Code:    http.StatusInternalServerError,
+					Status:  "Internal Server Error",
+					Message: "Cannot find word",
+				}
+				log.Printf("Cannot find word with id %d: %v", wordId, err)
+				ctx.JSON(http.StatusInternalServerError, webResponse)
+				return
+			}
+			if word.ID != 0 {
+				words = append(words, word)
+			}
+		}
+
+		student, err := controller.groupService.FindStudent(fsr)
+		studentInfo := response.StudentInformation{
+			StudentId: studentId,
+			Email:     student.Email,
+			Username:  student.Username,
+			Words:     words,
+		}
+		if err != nil {
+			webResponse := response.Response{
+				Code:    http.StatusInternalServerError,
+				Status:  "Internal Server Error",
+				Message: "Cannot find student",
+			}
+			log.Printf("cannot find studnent with id %v: %v", student, err)
+			ctx.JSON(http.StatusInternalServerError, webResponse)
+			return
+		}
+		students = append(students, studentInfo)
+	}
+
+	res := struct {
+		UserId   uint32                        `json:"user_id"`
+		GroupId  string                        `json:"group_id"`
+		Title    string                        `json:"title"`
+		Students []response.StudentInformation `json:"students"`
+	}{
+		UserId:   groupResponse.UserId,
+		GroupId:  groupResponse.GroupId,
+		Title:    groupResponse.Title,
+		Students: students,
 	}
 
 	webResponse := response.Response{
@@ -232,6 +310,40 @@ func (controller *GroupController) FindStudent(ctx *gin.Context) {
 			Message: "Cannot find group",
 		}
 		log.Printf("Cannot finds group: %v", err_fs)
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+	}
+
+	webResponse := response.Response{
+		Code:    200,
+		Status:  "Ok",
+		Message: "Successfully found student!",
+		Data:    res,
+	}
+
+	ctx.JSON(http.StatusOK, webResponse)
+}
+
+func (controller *GroupController) FindTeacher(ctx *gin.Context) {
+	authorizationHeader := ctx.GetHeader("Authorization")
+	if authorizationHeader == "" {
+		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
+		return
+	}
+
+	token := authorizationHeader[len("Bearer "):]
+
+	ftr := request.FindTeacherRequest{Token: token}
+	ctx.ShouldBindJSON(&ftr)
+
+	res, err_ft := controller.groupService.FindTeacher(ftr)
+	if err_ft != nil {
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  "Bad Request",
+			Message: "Cannot find group",
+		}
+		log.Printf("Cannot finds group: %v", err_ft)
 		ctx.JSON(http.StatusBadRequest, webResponse)
 		return
 	}
@@ -352,21 +464,40 @@ func (controller *GroupController) GetStatistics(ctx *gin.Context) {
 			ctx.JSON(http.StatusInternalServerError, webResponse)
 			return
 		}
-		words = append(words, word)
+		if word.ID != 0 {
+			words = append(words, word)
+		}
+	}
+
+	student, err := controller.groupService.FindStudent(request.FindStudentRequest{
+		Token: token, StudentId: StatResp.StudentId, GroupId: StatResp.GroupId,
+	})
+	if err != nil {
+		webResponse := response.Response{
+			Code:    http.StatusInternalServerError,
+			Status:  "Internal Server Error",
+			Message: "Cannot find student",
+		}
+		ctx.JSON(http.StatusInternalServerError, webResponse)
+		return
 	}
 
 	res := struct {
 		StatId    string                   `json:"statistics_id"`
 		GroupId   string                   `json:"group_id"`
 		TeacherId uint32                   `json:"teacher_id"`
-		StudentId uint32                   `json:"student_id"`
+		Student   response.StudentInfo     `json:"student"`
 		Words     []response.VocabResponse `json:"words"`
 	}{
 		StatId:    StatResp.StatId,
 		GroupId:   StatResp.GroupId,
 		TeacherId: StatResp.TeacherId,
-		StudentId: StatResp.StudentId,
-		Words:     words,
+		Student: response.StudentInfo{
+			StudentId: StatResp.StudentId,
+			Email:     student.Email,
+			Username:  student.Username,
+		},
+		Words: words,
 	}
 
 	webResponse := response.Response{

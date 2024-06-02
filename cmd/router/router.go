@@ -34,6 +34,7 @@ func NewRouter(
 	groupRouter.POST("/find", groupController.FindGroup)
 	groupRouter.GET("/find_teacher", groupController.FindGroupsTeacher)
 	groupRouter.GET("/find_student", groupController.FindGroupsStudent)
+	groupRouter.POST("/find_teacher_info", groupController.FindTeacher)
 	groupRouter.POST("/find_student_info", groupController.FindStudent)
 	groupRouter.POST("/get_statistics", groupController.GetStatistics)
 	groupRouter.PATCH("/remove", groupController.RemoveStudent)
