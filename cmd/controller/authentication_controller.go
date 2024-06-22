@@ -50,7 +50,6 @@ func (controller *AuthenticationController) Login(ctx *gin.Context) {
 		Data:    resp,
 	}
 
-	// ctx.SetCookie("token", token, config.TokenMaxAge*60, "/", "localhost", false, true)
 	ctx.JSON(http.StatusOK, webResponse)
 }
 

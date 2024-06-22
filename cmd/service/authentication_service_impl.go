@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 
+	"broker-service/cmd/config"
 	"broker-service/cmd/data/request"
 	u "broker-service/cmd/utils"
 	pb "broker-service/proto"
@@ -25,8 +26,13 @@ func NewAuthenticationServiceImpl(validate *validator.Validate) AuthenticationSe
 
 // Login implements AuthenticationService
 func (a *AuthenticationServiceImpl) Login(user request.LoginRequest) (string, error) {
+	loadConfig, err := config.LoadConfig(".")
+	if err != nil {
+		log.Fatal("🚀 Could not load environment variables", err)
+	}
+
 	// connect to auth service as a client
-	conn, err := grpc.Dial("0.0.0.0:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(loadConfig.AUTH_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -44,8 +50,13 @@ func (a *AuthenticationServiceImpl) Login(user request.LoginRequest) (string, er
 
 // Register implements AuthenticationService
 func (a *AuthenticationServiceImpl) Register(user request.CreateUserRequest) error {
+	loadConfig, err := config.LoadConfig(".")
+	if err != nil {
+		log.Fatal("🚀 Could not load environment variables", err)
+	}
+
 	// connect to auth service as a client
-	conn, err := grpc.Dial("0.0.0.0:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(loadConfig.AUTH_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}

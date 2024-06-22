@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 
+	"broker-service/cmd/config"
 	"broker-service/cmd/data/request"
 	"broker-service/cmd/data/response"
 	u "broker-service/cmd/utils"
@@ -20,7 +21,12 @@ type GroupServiceImpl struct {
 
 // AddStudent implements GroupService.
 func (*GroupServiceImpl) AddStudent(asr request.AddStudentRequest) error {
-	conn, err := grpc.Dial("0.0.0.0:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	loadConfig, err := config.LoadConfig(".")
+	if err != nil {
+		log.Fatal("🚀 Could not load environment variables", err)
+	}
+
+	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -38,7 +44,12 @@ func (*GroupServiceImpl) AddStudent(asr request.AddStudentRequest) error {
 
 // AddWordToUser implements GroupService.
 func (*GroupServiceImpl) AddWordToUser(awur request.AddWordToUserRequest) (response.AddWordToUserResponse, error) {
-	conn, err := grpc.Dial("0.0.0.0:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	loadConfig, err := config.LoadConfig(".")
+	if err != nil {
+		log.Fatal("🚀 Could not load environment variables", err)
+	}
+
+	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -64,8 +75,13 @@ func (*GroupServiceImpl) AddWordToUser(awur request.AddWordToUserRequest) (respo
 
 // CreateGroup implements GroupService
 func (g *GroupServiceImpl) CreateGroup(cgr request.CreateGroupRequest) error {
+	loadConfig, err := config.LoadConfig(".")
+	if err != nil {
+		log.Fatal("🚀 Could not load environment variables", err)
+	}
+
 	// connect to group service as a client
-	conn, err := grpc.Dial("0.0.0.0:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -83,7 +99,12 @@ func (g *GroupServiceImpl) CreateGroup(cgr request.CreateGroupRequest) error {
 
 // DeleteGroup implements GroupService.
 func (*GroupServiceImpl) DeleteGroup(dgr request.DeleteGroupRequest) error {
-	conn, err := grpc.Dial("0.0.0.0:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	loadConfig, err := config.LoadConfig(".")
+	if err != nil {
+		log.Fatal("🚀 Could not load environment variables", err)
+	}
+
+	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -101,7 +122,12 @@ func (*GroupServiceImpl) DeleteGroup(dgr request.DeleteGroupRequest) error {
 
 // FindGroup implements GroupService.
 func (*GroupServiceImpl) FindGroup(fgr request.FindGroupRequest) (response.GroupResponse, error) {
-	conn, err := grpc.Dial("0.0.0.0:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	loadConfig, err := config.LoadConfig(".")
+	if err != nil {
+		log.Fatal("🚀 Could not load environment variables", err)
+	}
+
+	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -130,7 +156,12 @@ func (*GroupServiceImpl) FindGroup(fgr request.FindGroupRequest) (response.Group
 
 // FindStudent implements GroupService.
 func (*GroupServiceImpl) FindStudent(fsr request.FindStudentRequest) (response.StudentResponse, error) {
-	conn, err := grpc.Dial("0.0.0.0:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	loadConfig, err := config.LoadConfig(".")
+	if err != nil {
+		log.Fatal("🚀 Could not load environment variables", err)
+	}
+
+	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -157,7 +188,12 @@ func (*GroupServiceImpl) FindStudent(fsr request.FindStudentRequest) (response.S
 
 // FindTeacher implements GroupService.
 func (*GroupServiceImpl) FindTeacher(ftr request.FindTeacherRequest) (response.TeacherResponse, error) {
-	conn, err := grpc.Dial("0.0.0.0:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	loadConfig, err := config.LoadConfig(".")
+	if err != nil {
+		log.Fatal("🚀 Could not load environment variables", err)
+	}
+
+	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -185,7 +221,12 @@ func (*GroupServiceImpl) FindTeacher(ftr request.FindTeacherRequest) (response.T
 
 // FindGroupsStudent implements GroupService.
 func (*GroupServiceImpl) FindGroupsStudent(fgsr request.FindGroupsStudentRequest) ([]response.GroupResponse, error) {
-	conn, err := grpc.Dial("0.0.0.0:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	loadConfig, err := config.LoadConfig(".")
+	if err != nil {
+		log.Fatal("🚀 Could not load environment variables", err)
+	}
+
+	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -215,7 +256,12 @@ func (*GroupServiceImpl) FindGroupsStudent(fgsr request.FindGroupsStudentRequest
 
 // FindGroupsTeacher implements GroupService.
 func (*GroupServiceImpl) FindGroupsTeacher(fgtr request.FindGroupsTeacherRequest) ([]response.GroupResponse, error) {
-	conn, err := grpc.Dial("0.0.0.0:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	loadConfig, err := config.LoadConfig(".")
+	if err != nil {
+		log.Fatal("🚀 Could not load environment variables", err)
+	}
+	
+	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -245,7 +291,12 @@ func (*GroupServiceImpl) FindGroupsTeacher(fgtr request.FindGroupsTeacherRequest
 
 // GetStatistics implements GroupService.
 func (*GroupServiceImpl) GetStatistics(gsr request.GetStatisticsRequest) (response.StatisticsResponse, error) {
-	conn, err := grpc.Dial("0.0.0.0:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	loadConfig, err := config.LoadConfig(".")
+	if err != nil {
+		log.Fatal("🚀 Could not load environment variables", err)
+	}
+
+	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -275,7 +326,12 @@ func (*GroupServiceImpl) GetStatistics(gsr request.GetStatisticsRequest) (respon
 
 // RemoveStudent implements GroupService.
 func (*GroupServiceImpl) RemoveStudent(rsr request.RemoveStudentRequest) error {
-	conn, err := grpc.Dial("0.0.0.0:50053", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	loadConfig, err := config.LoadConfig(".")
+	if err != nil {
+		log.Fatal("🚀 Could not load environment variables", err)
+	}
+
+	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
