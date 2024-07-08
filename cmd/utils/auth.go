@@ -22,3 +22,18 @@ func Register(c pb.AuthenticationServiceClient, username string, email string, p
 
 	return nil
 }
+
+func Login(c pb.AuthenticationServiceClient, email string, password string) (*pb.LoginResponse, error) {
+	req := &pb.LoginRequest{
+		Email:    email,
+		Password: password,
+	}
+
+	res, err := c.Login(context.Background(), req)
+	if err != nil {
+		return nil, errors.New("invalid username or Password")
+	}
+
+	return res, nil
+}
+

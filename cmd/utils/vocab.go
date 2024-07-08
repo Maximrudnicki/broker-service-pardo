@@ -8,11 +8,11 @@ import (
 	"io"
 )
 
-func CreateWord(v pb.VocabServiceClient, cwr request.CreateWordRequest) error {
+func CreateWord(v pb.VocabServiceClient, createWordRequest request.CreateWordRequest) error {
 	req := &pb.CreateRequest{
-		Token:      cwr.Token,
-		Word:       cwr.Word,
-		Definition: cwr.Definition,
+		Token:      createWordRequest.Token,
+		Word:       createWordRequest.Word,
+		Definition: createWordRequest.Definition,
 	}
 
 	_, err := v.CreateWord(context.Background(), req)
@@ -23,9 +23,9 @@ func CreateWord(v pb.VocabServiceClient, cwr request.CreateWordRequest) error {
 	return nil
 }
 
-func FindWord(v pb.VocabServiceClient, fwr request.FindWordRequest) (*pb.VocabResponse, error) {
+func FindWord(v pb.VocabServiceClient, findWordRequest request.FindWordRequest) (*pb.VocabResponse, error) {
 	req := &pb.WordRequest{
-		WordId: fwr.WordId,
+		WordId: findWordRequest.WordId,
 	}
 
 	word, err := v.FindWord(context.Background(), req)
@@ -36,10 +36,10 @@ func FindWord(v pb.VocabServiceClient, fwr request.FindWordRequest) (*pb.VocabRe
 	return word, nil
 }
 
-func DeleteWord(v pb.VocabServiceClient, dwr request.DeleteWordRequest) error {
+func DeleteWord(v pb.VocabServiceClient, deleteWordRequest request.DeleteWordRequest) error {
 	req := &pb.DeleteRequest{
-		Token:  dwr.Token,
-		WordId: dwr.WordId,
+		Token:  deleteWordRequest.Token,
+		WordId: deleteWordRequest.WordId,
 	}
 
 	_, err := v.DeleteWord(context.Background(), req)
@@ -51,7 +51,7 @@ func DeleteWord(v pb.VocabServiceClient, dwr request.DeleteWordRequest) error {
 }
 
 func GetWords(v pb.VocabServiceClient, token string) ([]*pb.VocabResponse, error) {
-	var vs []*pb.VocabResponse // vocab slice
+	var vocabSlice []*pb.VocabResponse
 
 	req := &pb.VocabRequest{
 		TokenType: "Bearer",
@@ -74,17 +74,17 @@ func GetWords(v pb.VocabServiceClient, token string) ([]*pb.VocabResponse, error
 			return nil, fmt.Errorf("something happened with stream %v", err)
 		}
 
-		vs = append(vs, res)
+		vocabSlice = append(vocabSlice, res)
 	}
 
-	return vs, nil
+	return vocabSlice, nil
 }
 
-func UpdateWord(v pb.VocabServiceClient, uwr request.UpdateWordRequest) error {
+func UpdateWord(v pb.VocabServiceClient, updateWordRequest request.UpdateWordRequest) error {
 	req := &pb.UpdateRequest{
-		Token:      uwr.Token,
-		Id:         uwr.WordId,
-		Definition: uwr.Definition,
+		Token:      updateWordRequest.Token,
+		Id:         updateWordRequest.WordId,
+		Definition: updateWordRequest.Definition,
 	}
 
 	_, err := v.UpdateWord(context.Background(), req)
@@ -96,11 +96,11 @@ func UpdateWord(v pb.VocabServiceClient, uwr request.UpdateWordRequest) error {
 }
 
 
-func UpdateWordStatus(v pb.VocabServiceClient, uwsr request.UpdateWordStatusRequest) error {
+func UpdateWordStatus(v pb.VocabServiceClient, updateWordStatusRequest request.UpdateWordStatusRequest) error {
 	req := &pb.UpdateStatusRequest{
-		Token:     uwsr.Token,
-		IsLearned: uwsr.IsLearned,
-		Id:        uwsr.WordId,
+		Token:     updateWordStatusRequest.Token,
+		IsLearned: updateWordStatusRequest.IsLearned,
+		Id:        updateWordStatusRequest.WordId,
 	}
 
 	_, err := v.UpdateWordStatus(context.Background(), req)
@@ -111,12 +111,12 @@ func UpdateWordStatus(v pb.VocabServiceClient, uwsr request.UpdateWordStatusRequ
 	return nil
 }
 
-func ManageTrainings(v pb.VocabServiceClient, mtr request.ManageTrainingsRequest) error {
+func ManageTrainings(v pb.VocabServiceClient, manageTrainingsRequest request.ManageTrainingsRequest) error {
 	req := &pb.ManageTrainingsRequest{
-		Token:    mtr.Token,
-		Training: mtr.Training,
-		Res:      mtr.TrainingResult,
-		Id:       mtr.WordId,
+		Token:    manageTrainingsRequest.Token,
+		Training: manageTrainingsRequest.Training,
+		Res:      manageTrainingsRequest.TrainingResult,
+		Id:       manageTrainingsRequest.WordId,
 	}
 
 	_, err := v.ManageTrainings(context.Background(), req)

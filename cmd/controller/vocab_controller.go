@@ -30,8 +30,8 @@ func (controller *VocabController) CreateWord(ctx *gin.Context) {
 
 	token := authorizationHeader[len("Bearer "):]
 
-	cwr := request.CreateWordRequest{Token: token}
-	err := ctx.ShouldBindJSON(&cwr)
+	req := request.CreateWordRequest{Token: token}
+	err := ctx.ShouldBindJSON(&req)
 	if err != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -43,7 +43,7 @@ func (controller *VocabController) CreateWord(ctx *gin.Context) {
 		return
 	}
 
-	err_cw := controller.vocabService.CreateWord(cwr)
+	err_cw := controller.vocabService.CreateWord(req)
 	if err_cw != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -77,12 +77,12 @@ func (controller *VocabController) DeleteWord(ctx *gin.Context) {
 	wordId := ctx.Param("wordId")
 	id, err_id := strconv.Atoi(wordId)
 
-	dwr := request.DeleteWordRequest{
+	req := request.DeleteWordRequest{
 		Token:  token,
 		WordId: uint32(id),
 	}
 
-	err_dw := controller.vocabService.DeleteWord(dwr)
+	err_dw := controller.vocabService.DeleteWord(req)
 	fmt.Println(err_dw)
 	if err_dw != nil || err_id != nil {
 		webResponse := response.Response{
@@ -152,11 +152,11 @@ func (controller *VocabController) UpdateWord(ctx *gin.Context) {
 	wordId := ctx.Param("wordId")
 	id, err_id := strconv.Atoi(wordId)
 
-	uwr := request.UpdateWordRequest{
+	req := request.UpdateWordRequest{
 		Token:  token,
 		WordId: uint32(id),
 	}
-	err := ctx.ShouldBindJSON(&uwr)
+	err := ctx.ShouldBindJSON(&req)
 	if err != nil || err_id != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -168,7 +168,7 @@ func (controller *VocabController) UpdateWord(ctx *gin.Context) {
 		return
 	}
 
-	err_uw := controller.vocabService.UpdateWord(uwr)
+	err_uw := controller.vocabService.UpdateWord(req)
 	if err_uw != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -202,11 +202,11 @@ func (controller *VocabController) UpdateWordStatus(ctx *gin.Context) {
 	wordId := ctx.Param("wordId")
 	id, err_id := strconv.Atoi(wordId)
 
-	uwsr := request.UpdateWordStatusRequest{
+	req := request.UpdateWordStatusRequest{
 		Token:  token,
 		WordId: uint32(id),
 	}
-	err := ctx.ShouldBindJSON(&uwsr)
+	err := ctx.ShouldBindJSON(&req)
 	if err != nil || err_id != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -218,7 +218,7 @@ func (controller *VocabController) UpdateWordStatus(ctx *gin.Context) {
 		return
 	}
 
-	err_uws := controller.vocabService.UpdateWordStatus(uwsr)
+	err_uws := controller.vocabService.UpdateWordStatus(req)
 
 	if err_uws != nil {
 		webResponse := response.Response{
@@ -253,11 +253,11 @@ func (controller *VocabController) ManageTrainings(ctx *gin.Context) {
 	wordId := ctx.Param("wordId")
 	id, err_id := strconv.Atoi(wordId)
 
-	mtr := request.ManageTrainingsRequest{
+	req := request.ManageTrainingsRequest{
 		Token:  token,
 		WordId: uint32(id),
 	}
-	err := ctx.ShouldBindJSON(&mtr)
+	err := ctx.ShouldBindJSON(&req)
 	if err != nil || err_id != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -269,7 +269,7 @@ func (controller *VocabController) ManageTrainings(ctx *gin.Context) {
 		return
 	}
 
-	err_mt := controller.vocabService.ManageTrainings(mtr)
+	err_mt := controller.vocabService.ManageTrainings(req)
 
 	if err_mt != nil {
 		webResponse := response.Response{

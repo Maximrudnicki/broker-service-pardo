@@ -8,10 +8,10 @@ import (
 	"io"
 )
 
-func AddStudent(g pb.GroupServiceClient, asr request.AddStudentRequest) error {
+func AddStudent(g pb.GroupServiceClient, addStudentRequest request.AddStudentRequest) error {
 	req := &pb.AddStudentRequest{
-		Token: asr.Token,
-		GroupId: asr.GroupId,
+		Token:   addStudentRequest.Token,
+		GroupId: addStudentRequest.GroupId,
 	}
 
 	_, err := g.AddStudent(context.Background(), req)
@@ -22,13 +22,13 @@ func AddStudent(g pb.GroupServiceClient, asr request.AddStudentRequest) error {
 	return nil
 }
 
-func AddWordToUser(g pb.GroupServiceClient, awur request.AddWordToUserRequest) (*pb.AddWordToUserResponse, error) {
+func AddWordToUser(g pb.GroupServiceClient, addWordToUserRequest request.AddWordToUserRequest) (*pb.AddWordToUserResponse, error) {
 	req := &pb.AddWordToUserRequest{
-		Word: awur.Word,
-		Definition: awur.Definition,
-		GroupId: awur.GroupId,
-		UserId: awur.UserId,
-		Token: awur.Token,
+		Word:       addWordToUserRequest.Word,
+		Definition: addWordToUserRequest.Definition,
+		GroupId:    addWordToUserRequest.GroupId,
+		UserId:     addWordToUserRequest.UserId,
+		Token:      addWordToUserRequest.Token,
 	}
 
 	res, err := g.AddWordToUser(context.Background(), req)
@@ -39,10 +39,10 @@ func AddWordToUser(g pb.GroupServiceClient, awur request.AddWordToUserRequest) (
 	return res, nil
 }
 
-func CreateGroup(g pb.GroupServiceClient, cgr request.CreateGroupRequest) error {
+func CreateGroup(g pb.GroupServiceClient, createGroupRequest request.CreateGroupRequest) error {
 	req := &pb.CreateGroupRequest{
-		Title:        cgr.Title,
-		Token: cgr.Token,
+		Title: createGroupRequest.Title,
+		Token: createGroupRequest.Token,
 	}
 
 	_, err := g.CreateGroup(context.Background(), req)
@@ -53,10 +53,10 @@ func CreateGroup(g pb.GroupServiceClient, cgr request.CreateGroupRequest) error 
 	return nil
 }
 
-func DeleteGroup(g pb.GroupServiceClient, dgr request.DeleteGroupRequest) error {
+func DeleteGroup(g pb.GroupServiceClient, deleteGroupRequest request.DeleteGroupRequest) error {
 	req := &pb.DeleteGroupRequest{
-		Token: dgr.Token,
-		GroupId: dgr.GroupId,
+		Token:   deleteGroupRequest.Token,
+		GroupId: deleteGroupRequest.GroupId,
 	}
 
 	_, err := g.DeleteGroup(context.Background(), req)
@@ -67,10 +67,10 @@ func DeleteGroup(g pb.GroupServiceClient, dgr request.DeleteGroupRequest) error 
 	return nil
 }
 
-func FindGroup(g pb.GroupServiceClient, dgr request.FindGroupRequest) (*pb.GroupResponse, error) {
+func FindGroup(g pb.GroupServiceClient, findGroupRequest request.FindGroupRequest) (*pb.GroupResponse, error) {
 	req := &pb.FindGroupRequest{
-		Token: dgr.Token,
-		GroupId: dgr.GroupId,
+		Token:   findGroupRequest.Token,
+		GroupId: findGroupRequest.GroupId,
 	}
 
 	group, err := g.FindGroup(context.Background(), req)
@@ -81,11 +81,11 @@ func FindGroup(g pb.GroupServiceClient, dgr request.FindGroupRequest) (*pb.Group
 	return group, nil
 }
 
-func FindStudent(g pb.GroupServiceClient, fsr request.FindStudentRequest) (*pb.StudentResponse, error) {
+func FindStudent(g pb.GroupServiceClient, findStudentRequest request.FindStudentRequest) (*pb.StudentResponse, error) {
 	req := &pb.FindStudentRequest{
-		Token: fsr.Token,
-		StudentId: fsr.StudentId,
-		GroupId: fsr.GroupId,
+		Token:     findStudentRequest.Token,
+		StudentId: findStudentRequest.StudentId,
+		GroupId:   findStudentRequest.GroupId,
 	}
 
 	student, err := g.FindStudent(context.Background(), req)
@@ -96,10 +96,10 @@ func FindStudent(g pb.GroupServiceClient, fsr request.FindStudentRequest) (*pb.S
 	return student, nil
 }
 
-func FindTeacher(g pb.GroupServiceClient, ftr request.FindTeacherRequest) (*pb.TeacherResponse, error) {
+func FindTeacher(g pb.GroupServiceClient, findTeacherRequest request.FindTeacherRequest) (*pb.TeacherResponse, error) {
 	req := &pb.FindTeacherRequest{
-		Token: ftr.Token,
-		GroupId: ftr.GroupId,
+		Token:   findTeacherRequest.Token,
+		GroupId: findTeacherRequest.GroupId,
 	}
 
 	teacher, err := g.FindTeacher(context.Background(), req)
@@ -110,12 +110,12 @@ func FindTeacher(g pb.GroupServiceClient, ftr request.FindTeacherRequest) (*pb.T
 	return teacher, nil
 }
 
-func FindGroupsTeacher(g pb.GroupServiceClient, fgtr request.FindGroupsTeacherRequest) ([]*pb.GroupResponse, error) {
+func FindGroupsTeacher(g pb.GroupServiceClient, findGroupsTeacherRequest request.FindGroupsTeacherRequest) ([]*pb.GroupResponse, error) {
 	req := &pb.FindGroupsTeacherRequest{
-		Token: fgtr.Token,
+		Token: findGroupsTeacherRequest.Token,
 	}
 
-	var grs []*pb.GroupResponse // group response slice
+	var groupResponseSlice []*pb.GroupResponse
 
 	stream, err := g.FindGroupsTeacher(context.Background(), req)
 	if err != nil {
@@ -133,18 +133,18 @@ func FindGroupsTeacher(g pb.GroupServiceClient, fgtr request.FindGroupsTeacherRe
 			return nil, fmt.Errorf("something happened with stream %v", err)
 		}
 
-		grs = append(grs, res)
+		groupResponseSlice = append(groupResponseSlice, res)
 	}
 
-	return grs, nil
+	return groupResponseSlice, nil
 }
 
-func FindGroupsStudent(g pb.GroupServiceClient, fgsr request.FindGroupsStudentRequest) ([]*pb.GroupResponse, error) {
+func FindGroupsStudent(g pb.GroupServiceClient, findGroupsStudentRequest request.FindGroupsStudentRequest) ([]*pb.GroupResponse, error) {
 	req := &pb.FindGroupsStudentRequest{
-		Token: fgsr.Token,
+		Token: findGroupsStudentRequest.Token,
 	}
 
-	var grs []*pb.GroupResponse // group response slice
+	var groupResponseSlice []*pb.GroupResponse
 
 	stream, err := g.FindGroupsStudent(context.Background(), req)
 	if err != nil {
@@ -162,17 +162,17 @@ func FindGroupsStudent(g pb.GroupServiceClient, fgsr request.FindGroupsStudentRe
 			return nil, fmt.Errorf("something happened with stream %v", err)
 		}
 
-		grs = append(grs, res)
+		groupResponseSlice = append(groupResponseSlice, res)
 	}
 
-	return grs, nil
+	return groupResponseSlice, nil
 }
 
-func GetStatistics(g pb.GroupServiceClient, gsr request.GetStatisticsRequest) (*pb.StatisticsResponse, error) {
+func GetStatistics(g pb.GroupServiceClient, getStatisticsRequest request.GetStatisticsRequest) (*pb.StatisticsResponse, error) {
 	req := &pb.GetStatisticsRequest{
-		StudentId: gsr.StudentId,
-		GroupId: gsr.GroupId,
-		Token: gsr.Token,
+		StudentId: getStatisticsRequest.StudentId,
+		GroupId:   getStatisticsRequest.GroupId,
+		Token:     getStatisticsRequest.Token,
 	}
 
 	res, err := g.GetStatistics(context.Background(), req)
@@ -183,11 +183,11 @@ func GetStatistics(g pb.GroupServiceClient, gsr request.GetStatisticsRequest) (*
 	return res, nil
 }
 
-func RemoveStudent(g pb.GroupServiceClient, rsr request.RemoveStudentRequest) error {
+func RemoveStudent(g pb.GroupServiceClient, removeStudentRequest request.RemoveStudentRequest) error {
 	req := &pb.RemoveStudentRequest{
-		Token: rsr.Token,
-		GroupId: rsr.GroupId,
-		UserId: rsr.UserId,
+		Token:   removeStudentRequest.Token,
+		GroupId: removeStudentRequest.GroupId,
+		UserId:  removeStudentRequest.UserId,
 	}
 
 	_, err := g.RemoveStudent(context.Background(), req)
