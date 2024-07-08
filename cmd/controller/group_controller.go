@@ -29,8 +29,8 @@ func (controller *GroupController) AddStudent(ctx *gin.Context) {
 
 	token := authorizationHeader[len("Bearer "):]
 
-	asr := request.AddStudentRequest{Token: token}
-	err := ctx.ShouldBindJSON(&asr)
+	req := request.AddStudentRequest{Token: token}
+	err := ctx.ShouldBindJSON(&req)
 	if err != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -42,7 +42,7 @@ func (controller *GroupController) AddStudent(ctx *gin.Context) {
 		return
 	}
 
-	err_as := controller.groupService.AddStudent(asr)
+	err_as := controller.groupService.AddStudent(req)
 	if err_as != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -73,10 +73,10 @@ func (controller *GroupController) AddWordToUser(ctx *gin.Context) {
 
 	token := authorizationHeader[len("Bearer "):]
 
-	awur := request.AddWordToUserRequest{Token: token}
-	ctx.ShouldBindJSON(&awur)
+	req := request.AddWordToUserRequest{Token: token}
+	ctx.ShouldBindJSON(&req)
 
-	res, err_fg := controller.groupService.AddWordToUser(awur)
+	res, err_fg := controller.groupService.AddWordToUser(req)
 	if err_fg != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -107,8 +107,8 @@ func (controller *GroupController) CreateGroup(ctx *gin.Context) {
 
 	token := authorizationHeader[len("Bearer "):]
 
-	cgr := request.CreateGroupRequest{Token: token}
-	err := ctx.ShouldBindJSON(&cgr)
+	req := request.CreateGroupRequest{Token: token}
+	err := ctx.ShouldBindJSON(&req)
 	if err != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -120,7 +120,7 @@ func (controller *GroupController) CreateGroup(ctx *gin.Context) {
 		return
 	}
 
-	err_cg := controller.groupService.CreateGroup(cgr)
+	err_cg := controller.groupService.CreateGroup(req)
 	if err_cg != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -151,12 +151,12 @@ func (controller *GroupController) DeleteGroup(ctx *gin.Context) {
 
 	token := authorizationHeader[len("Bearer "):]
 
-	dgr := request.DeleteGroupRequest{
+	req := request.DeleteGroupRequest{
 		Token:   token,
 		GroupId: ctx.Param("groupId"),
 	}
 
-	err_dg := controller.groupService.DeleteGroup(dgr)
+	err_dg := controller.groupService.DeleteGroup(req)
 	if err_dg != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -187,10 +187,10 @@ func (controller *GroupController) FindGroup(ctx *gin.Context) {
 
 	token := authorizationHeader[len("Bearer "):]
 
-	fgr := request.FindGroupRequest{Token: token}
-	ctx.ShouldBindJSON(&fgr)
+	req := request.FindGroupRequest{Token: token}
+	ctx.ShouldBindJSON(&req)
 
-	groupResponse, err_fg := controller.groupService.FindGroup(fgr)
+	groupResponse, err_fg := controller.groupService.FindGroup(req)
 	if err_fg != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -204,18 +204,18 @@ func (controller *GroupController) FindGroup(ctx *gin.Context) {
 
 	students := make([]response.StudentInformation, 0, len(groupResponse.Students))
 	for _, studentId := range groupResponse.Students {
-		fsr := request.FindStudentRequest{
+		findStudentRequest := request.FindStudentRequest{
 			Token:     token,
 			StudentId: studentId,
-			GroupId:   fgr.GroupId,
+			GroupId:   req.GroupId,
 		}
-		gsr := request.GetStatisticsRequest{
+		getStatisticsRequest := request.GetStatisticsRequest{
 			Token:     token,
 			StudentId: studentId,
-			GroupId:   fgr.GroupId,
+			GroupId:   req.GroupId,
 		}
 
-		StatResp, err_gs := controller.groupService.GetStatistics(gsr)
+		statResp, err_gs := controller.groupService.GetStatistics(getStatisticsRequest)
 		if err_gs != nil {
 			webResponse := response.Response{
 				Code:    http.StatusBadRequest,
@@ -227,12 +227,12 @@ func (controller *GroupController) FindGroup(ctx *gin.Context) {
 			return
 		}
 
-		words := make([]response.VocabResponse, 0, len(StatResp.Words))
-		for _, wordId := range StatResp.Words {
-			fwr := request.FindWordRequest{
+		words := make([]response.VocabResponse, 0, len(statResp.Words))
+		for _, wordId := range statResp.Words {
+			findWordRequest := request.FindWordRequest{
 				WordId: wordId,
 			}
-			word, err := controller.vocabService.FindWord(fwr)
+			word, err := controller.vocabService.FindWord(findWordRequest)
 			if err != nil {
 				webResponse := response.Response{
 					Code:    http.StatusInternalServerError,
@@ -248,7 +248,7 @@ func (controller *GroupController) FindGroup(ctx *gin.Context) {
 			}
 		}
 
-		student, err := controller.groupService.FindStudent(fsr)
+		student, err := controller.groupService.FindStudent(findStudentRequest)
 		studentInfo := response.StudentInformation{
 			StudentId: studentId,
 			Email:     student.Email,
@@ -299,10 +299,10 @@ func (controller *GroupController) FindStudent(ctx *gin.Context) {
 
 	token := authorizationHeader[len("Bearer "):]
 
-	fsr := request.FindStudentRequest{Token: token}
-	ctx.ShouldBindJSON(&fsr)
+	findStudentRequest := request.FindStudentRequest{Token: token}
+	ctx.ShouldBindJSON(&findStudentRequest)
 
-	res, err_fs := controller.groupService.FindStudent(fsr)
+	res, err_fs := controller.groupService.FindStudent(findStudentRequest)
 	if err_fs != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -333,10 +333,10 @@ func (controller *GroupController) FindTeacher(ctx *gin.Context) {
 
 	token := authorizationHeader[len("Bearer "):]
 
-	ftr := request.FindTeacherRequest{Token: token}
-	ctx.ShouldBindJSON(&ftr)
+	req := request.FindTeacherRequest{Token: token}
+	ctx.ShouldBindJSON(&req)
 
-	res, err_ft := controller.groupService.FindTeacher(ftr)
+	res, err_ft := controller.groupService.FindTeacher(req)
 	if err_ft != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -367,9 +367,9 @@ func (controller *GroupController) FindGroupsTeacher(ctx *gin.Context) {
 
 	token := authorizationHeader[len("Bearer "):]
 
-	fgtr := request.FindGroupsTeacherRequest{Token: token}
+	req := request.FindGroupsTeacherRequest{Token: token}
 
-	res, err_fgt := controller.groupService.FindGroupsTeacher(fgtr)
+	res, err_fgt := controller.groupService.FindGroupsTeacher(req)
 	if err_fgt != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -400,9 +400,9 @@ func (controller *GroupController) FindGroupsStudent(ctx *gin.Context) {
 
 	token := authorizationHeader[len("Bearer "):]
 
-	fgsr := request.FindGroupsStudentRequest{Token: token}
+	req := request.FindGroupsStudentRequest{Token: token}
 
-	res, err_fgs := controller.groupService.FindGroupsStudent(fgsr)
+	res, err_fgs := controller.groupService.FindGroupsStudent(req)
 	if err_fgs != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -433,10 +433,10 @@ func (controller *GroupController) GetStatistics(ctx *gin.Context) {
 
 	token := authorizationHeader[len("Bearer "):]
 
-	gsr := request.GetStatisticsRequest{Token: token}
-	ctx.ShouldBindJSON(&gsr)
+	req := request.GetStatisticsRequest{Token: token}
+	ctx.ShouldBindJSON(&req)
 
-	StatResp, err_gs := controller.groupService.GetStatistics(gsr)
+	statResp, err_gs := controller.groupService.GetStatistics(req)
 	if err_gs != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -448,12 +448,12 @@ func (controller *GroupController) GetStatistics(ctx *gin.Context) {
 		return
 	}
 
-	words := make([]response.VocabResponse, 0, len(StatResp.Words))
-	for _, wordId := range StatResp.Words {
-		fwr := request.FindWordRequest{
+	words := make([]response.VocabResponse, 0, len(statResp.Words))
+	for _, wordId := range statResp.Words {
+		findWordRequest := request.FindWordRequest{
 			WordId: wordId,
 		}
-		word, err := controller.vocabService.FindWord(fwr)
+		word, err := controller.vocabService.FindWord(findWordRequest)
 		if err != nil {
 			webResponse := response.Response{
 				Code:    http.StatusInternalServerError,
@@ -470,7 +470,7 @@ func (controller *GroupController) GetStatistics(ctx *gin.Context) {
 	}
 
 	student, err := controller.groupService.FindStudent(request.FindStudentRequest{
-		Token: token, StudentId: StatResp.StudentId, GroupId: StatResp.GroupId,
+		Token: token, StudentId: statResp.StudentId, GroupId: statResp.GroupId,
 	})
 	if err != nil {
 		webResponse := response.Response{
@@ -489,11 +489,11 @@ func (controller *GroupController) GetStatistics(ctx *gin.Context) {
 		Student   response.StudentInfo     `json:"student"`
 		Words     []response.VocabResponse `json:"words"`
 	}{
-		StatId:    StatResp.StatId,
-		GroupId:   StatResp.GroupId,
-		TeacherId: StatResp.TeacherId,
+		StatId:    statResp.StatId,
+		GroupId:   statResp.GroupId,
+		TeacherId: statResp.TeacherId,
 		Student: response.StudentInfo{
-			StudentId: StatResp.StudentId,
+			StudentId: statResp.StudentId,
 			Email:     student.Email,
 			Username:  student.Username,
 		},
@@ -519,8 +519,8 @@ func (controller *GroupController) RemoveStudent(ctx *gin.Context) {
 
 	token := authorizationHeader[len("Bearer "):]
 
-	rsr := request.RemoveStudentRequest{Token: token}
-	err := ctx.ShouldBindJSON(&rsr)
+	req := request.RemoveStudentRequest{Token: token}
+	err := ctx.ShouldBindJSON(&req)
 	if err != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
@@ -532,7 +532,7 @@ func (controller *GroupController) RemoveStudent(ctx *gin.Context) {
 		return
 	}
 
-	err_rs := controller.groupService.RemoveStudent(rsr)
+	err_rs := controller.groupService.RemoveStudent(req)
 	if err_rs != nil {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,

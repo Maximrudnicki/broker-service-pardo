@@ -32,7 +32,7 @@ func (v *VocabServiceImpl) CreateWord(cwr request.CreateWordRequest) error {
 		log.Fatal("🚀 Could not load environment variables", err)
 	}
 	
-	conn, err := grpc.Dial(loadConfig.VOCAB_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.VOCAB_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -55,7 +55,7 @@ func (v *VocabServiceImpl) DeleteWord(dwr request.DeleteWordRequest) error {
 		log.Fatal("🚀 Could not load environment variables", err)
 	}
 	
-	conn, err := grpc.Dial(loadConfig.VOCAB_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.VOCAB_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -78,7 +78,7 @@ func (v *VocabServiceImpl) FindWord(fwr request.FindWordRequest) (response.Vocab
 		log.Fatal("🚀 Could not load environment variables", err)
 	}
 	
-	conn, err := grpc.Dial(loadConfig.VOCAB_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.VOCAB_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -117,7 +117,7 @@ func (v *VocabServiceImpl) GetWords(vr request.VocabRequest) ([]response.VocabRe
 		log.Fatal("🚀 Could not load environment variables", err)
 	}
 	
-	conn, err := grpc.Dial(loadConfig.VOCAB_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.VOCAB_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -157,7 +157,7 @@ func (v *VocabServiceImpl) UpdateWord(uwr request.UpdateWordRequest) error {
 		log.Fatal("🚀 Could not load environment variables", err)
 	}
 	
-	conn, err := grpc.Dial(loadConfig.VOCAB_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.VOCAB_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -180,7 +180,7 @@ func (v *VocabServiceImpl) UpdateWordStatus(uwsr request.UpdateWordStatusRequest
 		log.Fatal("🚀 Could not load environment variables", err)
 	}
 	
-	conn, err := grpc.Dial(loadConfig.VOCAB_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.VOCAB_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -203,7 +203,7 @@ func (*VocabServiceImpl) ManageTrainings(mtr request.ManageTrainingsRequest) err
 		log.Fatal("🚀 Could not load environment variables", err)
 	}
 	
-	conn, err := grpc.Dial(loadConfig.VOCAB_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.VOCAB_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}

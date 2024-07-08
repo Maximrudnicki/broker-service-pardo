@@ -26,7 +26,7 @@ func (*GroupServiceImpl) AddStudent(asr request.AddStudentRequest) error {
 		log.Fatal("🚀 Could not load environment variables", err)
 	}
 
-	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -49,7 +49,7 @@ func (*GroupServiceImpl) AddWordToUser(awur request.AddWordToUserRequest) (respo
 		log.Fatal("🚀 Could not load environment variables", err)
 	}
 
-	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -81,7 +81,7 @@ func (g *GroupServiceImpl) CreateGroup(cgr request.CreateGroupRequest) error {
 	}
 
 	// connect to group service as a client
-	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -104,7 +104,7 @@ func (*GroupServiceImpl) DeleteGroup(dgr request.DeleteGroupRequest) error {
 		log.Fatal("🚀 Could not load environment variables", err)
 	}
 
-	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -127,7 +127,7 @@ func (*GroupServiceImpl) FindGroup(fgr request.FindGroupRequest) (response.Group
 		log.Fatal("🚀 Could not load environment variables", err)
 	}
 
-	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -161,7 +161,7 @@ func (*GroupServiceImpl) FindStudent(fsr request.FindStudentRequest) (response.S
 		log.Fatal("🚀 Could not load environment variables", err)
 	}
 
-	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -193,7 +193,7 @@ func (*GroupServiceImpl) FindTeacher(ftr request.FindTeacherRequest) (response.T
 		log.Fatal("🚀 Could not load environment variables", err)
 	}
 
-	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -226,7 +226,7 @@ func (*GroupServiceImpl) FindGroupsStudent(fgsr request.FindGroupsStudentRequest
 		log.Fatal("🚀 Could not load environment variables", err)
 	}
 
-	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -261,7 +261,7 @@ func (*GroupServiceImpl) FindGroupsTeacher(fgtr request.FindGroupsTeacherRequest
 		log.Fatal("🚀 Could not load environment variables", err)
 	}
 	
-	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -296,7 +296,7 @@ func (*GroupServiceImpl) GetStatistics(gsr request.GetStatisticsRequest) (respon
 		log.Fatal("🚀 Could not load environment variables", err)
 	}
 
-	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -331,7 +331,7 @@ func (*GroupServiceImpl) RemoveStudent(rsr request.RemoveStudentRequest) error {
 		log.Fatal("🚀 Could not load environment variables", err)
 	}
 
-	conn, err := grpc.Dial(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.GROUP_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}

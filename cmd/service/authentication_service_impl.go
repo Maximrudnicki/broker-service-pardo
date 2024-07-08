@@ -32,7 +32,7 @@ func (a *AuthenticationServiceImpl) Login(user request.LoginRequest) (string, er
 	}
 
 	// connect to auth service as a client
-	conn, err := grpc.Dial(loadConfig.AUTH_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.AUTH_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -56,7 +56,7 @@ func (a *AuthenticationServiceImpl) Register(user request.CreateUserRequest) err
 	}
 
 	// connect to auth service as a client
-	conn, err := grpc.Dial(loadConfig.AUTH_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(loadConfig.AUTH_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}

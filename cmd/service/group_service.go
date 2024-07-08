@@ -6,15 +6,15 @@ import (
 )
 
 type GroupService interface {
-	AddStudent(asr request.AddStudentRequest) error
-	AddWordToUser(awur request.AddWordToUserRequest) (response.AddWordToUserResponse, error)
-	CreateGroup(cgr request.CreateGroupRequest) error
-	DeleteGroup(dgr request.DeleteGroupRequest) error
-	FindGroup(fgr request.FindGroupRequest) (response.GroupResponse, error)
-	FindStudent(fsr request.FindStudentRequest) (response.StudentResponse, error)
-	FindTeacher(fsr request.FindTeacherRequest) (response.TeacherResponse, error)
-	FindGroupsTeacher(fgtr request.FindGroupsTeacherRequest) ([]response.GroupResponse , error)
-	FindGroupsStudent(fgsr request.FindGroupsStudentRequest) ([]response.GroupResponse , error)
-	GetStatistics(gsr request.GetStatisticsRequest) (response.StatisticsResponse, error)
-	RemoveStudent(rsr request.RemoveStudentRequest) error
+	AddStudent(addStudentRequest request.AddStudentRequest) error
+	AddWordToUser(addWordToUserRequest request.AddWordToUserRequest) (response.AddWordToUserResponse, error)
+	CreateGroup(createGroupRequest request.CreateGroupRequest) error
+	DeleteGroup(deleteGroupRequest request.DeleteGroupRequest) error
+	FindGroup(findGroupRequest request.FindGroupRequest) (response.GroupResponse, error)
+	FindStudent(findStudentRequest request.FindStudentRequest) (response.StudentResponse, error)
+	FindTeacher(findTeacherRequest request.FindTeacherRequest) (response.TeacherResponse, error)
+	FindGroupsTeacher(findGroupsTeacherRequest request.FindGroupsTeacherRequest) ([]response.GroupResponse , error)
+	FindGroupsStudent(findGroupsStudentRequest request.FindGroupsStudentRequest) ([]response.GroupResponse , error)
+	GetStatistics(getStatisticsRequest request.GetStatisticsRequest) (response.StatisticsResponse, error)
+	RemoveStudent(removeStudentRequest request.RemoveStudentRequest) error
 }
