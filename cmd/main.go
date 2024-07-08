@@ -35,7 +35,7 @@ func main() {
 	r := router.NewRouter(authenticationController, vocabController, groupController)
 
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:8080", "http://127.0.0.1:8080"},
+		AllowedOrigins:   []string{loadConfig.ALLOWED_ORIGINS},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
 		AllowedHeaders:   []string{"Access-Control-Allow-Origin", "Accept", "Authorization", "Content-Type", "X-CSRF-Token", "Origin"},
 		AllowCredentials: true,
