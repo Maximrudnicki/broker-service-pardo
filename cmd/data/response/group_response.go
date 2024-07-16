@@ -37,8 +37,8 @@ type StudentInfo struct {
 }
 
 type StudentInformation struct {
-	StudentId uint32   `json:student_id`
-	Email     string   `json:"email"`
-	Username  string   `json:"username"`
+	StudentId uint32          `json:student_id`
+	Email     string          `json:"email"`
+	Username  string          `json:"username"`
 	Words     []VocabResponse `json:"words"`
 }

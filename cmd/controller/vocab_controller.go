@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"strconv"
@@ -9,6 +11,7 @@ import (
 	"broker-service/cmd/data/request"
 	"broker-service/cmd/data/response"
 	"broker-service/cmd/service"
+	"broker-service/cmd/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,13 +25,7 @@ func NewVocabController(service service.VocabService) *VocabController {
 }
 
 func (controller *VocabController) CreateWord(ctx *gin.Context) {
-	authorizationHeader := ctx.GetHeader("Authorization")
-	if authorizationHeader == "" {
-		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
-		return
-	}
-
-	token := authorizationHeader[len("Bearer "):]
+	token, _ := utils.GetToken(ctx)
 
 	req := request.CreateWordRequest{Token: token}
 	err := ctx.ShouldBindJSON(&req)
@@ -66,13 +63,7 @@ func (controller *VocabController) CreateWord(ctx *gin.Context) {
 }
 
 func (controller *VocabController) DeleteWord(ctx *gin.Context) {
-	authorizationHeader := ctx.GetHeader("Authorization")
-	if authorizationHeader == "" {
-		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
-		return
-	}
-
-	token := authorizationHeader[len("Bearer "):]
+	token, _ := utils.GetToken(ctx)
 
 	wordId := ctx.Param("wordId")
 	id, err_id := strconv.Atoi(wordId)
@@ -105,13 +96,7 @@ func (controller *VocabController) DeleteWord(ctx *gin.Context) {
 }
 
 func (controller *VocabController) GetWords(ctx *gin.Context) {
-	authorizationHeader := ctx.GetHeader("Authorization")
-	if authorizationHeader == "" {
-		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
-		return
-	}
-
-	token := authorizationHeader[len("Bearer "):]
+	token, _ := utils.GetToken(ctx)
 
 	vocabRequest := request.VocabRequest{
 		TokenType: "Bearer",
@@ -141,13 +126,7 @@ func (controller *VocabController) GetWords(ctx *gin.Context) {
 }
 
 func (controller *VocabController) UpdateWord(ctx *gin.Context) {
-	authorizationHeader := ctx.GetHeader("Authorization")
-	if authorizationHeader == "" {
-		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
-		return
-	}
-
-	token := authorizationHeader[len("Bearer "):]
+	token, _ := utils.GetToken(ctx)
 
 	wordId := ctx.Param("wordId")
 	id, err_id := strconv.Atoi(wordId)
@@ -191,13 +170,7 @@ func (controller *VocabController) UpdateWord(ctx *gin.Context) {
 }
 
 func (controller *VocabController) UpdateWordStatus(ctx *gin.Context) {
-	authorizationHeader := ctx.GetHeader("Authorization")
-	if authorizationHeader == "" {
-		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
-		return
-	}
-
-	token := authorizationHeader[len("Bearer "):]
+	token, _ := utils.GetToken(ctx)
 
 	wordId := ctx.Param("wordId")
 	id, err_id := strconv.Atoi(wordId)
@@ -242,13 +215,7 @@ func (controller *VocabController) UpdateWordStatus(ctx *gin.Context) {
 }
 
 func (controller *VocabController) ManageTrainings(ctx *gin.Context) {
-	authorizationHeader := ctx.GetHeader("Authorization")
-	if authorizationHeader == "" {
-		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
-		return
-	}
-
-	token := authorizationHeader[len("Bearer "):]
+	token, _ := utils.GetToken(ctx)
 
 	wordId := ctx.Param("wordId")
 	id, err_id := strconv.Atoi(wordId)
@@ -262,7 +229,7 @@ func (controller *VocabController) ManageTrainings(ctx *gin.Context) {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
 			Status:  "Bad Request",
-			Message: "Cannot add word",
+			Message: "Cannot manage training",
 		}
 		log.Printf("Cannot bind JSON: %v", err)
 		ctx.JSON(http.StatusBadRequest, webResponse)

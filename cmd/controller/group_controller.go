@@ -7,6 +7,7 @@ import (
 	"broker-service/cmd/data/request"
 	"broker-service/cmd/data/response"
 	"broker-service/cmd/service"
+	"broker-service/cmd/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,13 +22,7 @@ func NewGroupController(service service.GroupService, vs service.VocabService) *
 }
 
 func (controller *GroupController) AddStudent(ctx *gin.Context) {
-	authorizationHeader := ctx.GetHeader("Authorization")
-	if authorizationHeader == "" {
-		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
-		return
-	}
-
-	token := authorizationHeader[len("Bearer "):]
+	token, _ := utils.GetToken(ctx)
 
 	req := request.AddStudentRequest{Token: token}
 	err := ctx.ShouldBindJSON(&req)
@@ -65,13 +60,7 @@ func (controller *GroupController) AddStudent(ctx *gin.Context) {
 }
 
 func (controller *GroupController) AddWordToUser(ctx *gin.Context) {
-	authorizationHeader := ctx.GetHeader("Authorization")
-	if authorizationHeader == "" {
-		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
-		return
-	}
-
-	token := authorizationHeader[len("Bearer "):]
+	token, _ := utils.GetToken(ctx)
 
 	req := request.AddWordToUserRequest{Token: token}
 	ctx.ShouldBindJSON(&req)
@@ -99,13 +88,7 @@ func (controller *GroupController) AddWordToUser(ctx *gin.Context) {
 }
 
 func (controller *GroupController) CreateGroup(ctx *gin.Context) {
-	authorizationHeader := ctx.GetHeader("Authorization")
-	if authorizationHeader == "" {
-		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
-		return
-	}
-
-	token := authorizationHeader[len("Bearer "):]
+	token, _ := utils.GetToken(ctx)
 
 	req := request.CreateGroupRequest{Token: token}
 	err := ctx.ShouldBindJSON(&req)
@@ -143,13 +126,7 @@ func (controller *GroupController) CreateGroup(ctx *gin.Context) {
 }
 
 func (controller *GroupController) DeleteGroup(ctx *gin.Context) {
-	authorizationHeader := ctx.GetHeader("Authorization")
-	if authorizationHeader == "" {
-		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
-		return
-	}
-
-	token := authorizationHeader[len("Bearer "):]
+	token, _ := utils.GetToken(ctx)
 
 	req := request.DeleteGroupRequest{
 		Token:   token,
@@ -179,13 +156,7 @@ func (controller *GroupController) DeleteGroup(ctx *gin.Context) {
 }
 
 func (controller *GroupController) FindGroup(ctx *gin.Context) {
-	authorizationHeader := ctx.GetHeader("Authorization")
-	if authorizationHeader == "" {
-		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
-		return
-	}
-
-	token := authorizationHeader[len("Bearer "):]
+	token, _ := utils.GetToken(ctx)
 
 	req := request.FindGroupRequest{Token: token}
 	ctx.ShouldBindJSON(&req)
@@ -291,13 +262,7 @@ func (controller *GroupController) FindGroup(ctx *gin.Context) {
 }
 
 func (controller *GroupController) FindStudent(ctx *gin.Context) {
-	authorizationHeader := ctx.GetHeader("Authorization")
-	if authorizationHeader == "" {
-		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
-		return
-	}
-
-	token := authorizationHeader[len("Bearer "):]
+	token, _ := utils.GetToken(ctx)
 
 	findStudentRequest := request.FindStudentRequest{Token: token}
 	ctx.ShouldBindJSON(&findStudentRequest)
@@ -325,13 +290,7 @@ func (controller *GroupController) FindStudent(ctx *gin.Context) {
 }
 
 func (controller *GroupController) FindTeacher(ctx *gin.Context) {
-	authorizationHeader := ctx.GetHeader("Authorization")
-	if authorizationHeader == "" {
-		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
-		return
-	}
-
-	token := authorizationHeader[len("Bearer "):]
+	token, _ := utils.GetToken(ctx)
 
 	req := request.FindTeacherRequest{Token: token}
 	ctx.ShouldBindJSON(&req)
@@ -359,13 +318,7 @@ func (controller *GroupController) FindTeacher(ctx *gin.Context) {
 }
 
 func (controller *GroupController) FindGroupsTeacher(ctx *gin.Context) {
-	authorizationHeader := ctx.GetHeader("Authorization")
-	if authorizationHeader == "" {
-		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
-		return
-	}
-
-	token := authorizationHeader[len("Bearer "):]
+	token, _ := utils.GetToken(ctx)
 
 	req := request.FindGroupsTeacherRequest{Token: token}
 
@@ -392,13 +345,7 @@ func (controller *GroupController) FindGroupsTeacher(ctx *gin.Context) {
 }
 
 func (controller *GroupController) FindGroupsStudent(ctx *gin.Context) {
-	authorizationHeader := ctx.GetHeader("Authorization")
-	if authorizationHeader == "" {
-		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
-		return
-	}
-
-	token := authorizationHeader[len("Bearer "):]
+	token, _ := utils.GetToken(ctx)
 
 	req := request.FindGroupsStudentRequest{Token: token}
 
@@ -425,13 +372,7 @@ func (controller *GroupController) FindGroupsStudent(ctx *gin.Context) {
 }
 
 func (controller *GroupController) GetStatistics(ctx *gin.Context) {
-	authorizationHeader := ctx.GetHeader("Authorization")
-	if authorizationHeader == "" {
-		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
-		return
-	}
-
-	token := authorizationHeader[len("Bearer "):]
+	token, _ := utils.GetToken(ctx)
 
 	req := request.GetStatisticsRequest{Token: token}
 	ctx.ShouldBindJSON(&req)
@@ -511,13 +452,7 @@ func (controller *GroupController) GetStatistics(ctx *gin.Context) {
 }
 
 func (controller *GroupController) RemoveStudent(ctx *gin.Context) {
-	authorizationHeader := ctx.GetHeader("Authorization")
-	if authorizationHeader == "" {
-		ctx.JSON(400, gin.H{"error": "Authorization header is missing"})
-		return
-	}
-
-	token := authorizationHeader[len("Bearer "):]
+	token, _ := utils.GetToken(ctx)
 
 	req := request.RemoveStudentRequest{Token: token}
 	err := ctx.ShouldBindJSON(&req)

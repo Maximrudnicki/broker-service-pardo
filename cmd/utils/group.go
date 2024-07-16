@@ -33,7 +33,7 @@ func AddWordToUser(g pb.GroupServiceClient, addWordToUserRequest request.AddWord
 
 	res, err := g.AddWordToUser(context.Background(), req)
 	if err != nil {
-		return nil, fmt.Errorf("error happened while adding student to the group: %v", err)
+		return nil, fmt.Errorf("error happened while adding word to student: %v", err)
 	}
 
 	return res, nil
