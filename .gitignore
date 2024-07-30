@@ -3,3 +3,6 @@
 /bin
 
 *.pb.go
+
+/logs
+logs.*

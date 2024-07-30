@@ -2,7 +2,7 @@ package router
 
 import (
 	"broker-service/cmd/controller"
-	"net/http"
+	"broker-service/cmd/middleware"
 	
 	"github.com/gin-gonic/gin"
 )
@@ -13,9 +13,7 @@ func NewRouter(
 	groupController *controller.GroupController) *gin.Engine {
 	router := gin.Default()
 
-	router.GET("", func(context *gin.Context) {
-		context.JSON(http.StatusOK, "welcome home")
-	})
+	router.Use(middleware.LoggerMiddleware())
 
 	router.NoRoute(func(c *gin.Context) {
 		c.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})

@@ -31,13 +31,13 @@ type AddWordToUserResponse struct {
 }
 
 type StudentInfo struct {
-	StudentId uint32 `json:student_id`
+	StudentId uint32 `json:"student_id"`
 	Email     string `json:"email"`
 	Username  string `json:"username"`
 }
 
 type StudentInformation struct {
-	StudentId uint32          `json:student_id`
+	StudentId uint32          `json:"student_id"`
 	Email     string          `json:"email"`
 	Username  string          `json:"username"`
 	Words     []VocabResponse `json:"words"`

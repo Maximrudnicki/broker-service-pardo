@@ -272,9 +272,9 @@ func (controller *GroupController) FindStudent(ctx *gin.Context) {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
 			Status:  "Bad Request",
-			Message: "Cannot find group",
+			Message: "Cannot find student",
 		}
-		log.Printf("Cannot finds group: %v", err_fs)
+		log.Printf("Cannot find student: %v", err_fs)
 		ctx.JSON(http.StatusBadRequest, webResponse)
 		return
 	}
@@ -300,9 +300,9 @@ func (controller *GroupController) FindTeacher(ctx *gin.Context) {
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
 			Status:  "Bad Request",
-			Message: "Cannot find group",
+			Message: "Cannot find teacher",
 		}
-		log.Printf("Cannot finds group: %v", err_ft)
+		log.Printf("Cannot find teacher: %v", err_ft)
 		ctx.JSON(http.StatusBadRequest, webResponse)
 		return
 	}
@@ -310,7 +310,7 @@ func (controller *GroupController) FindTeacher(ctx *gin.Context) {
 	webResponse := response.Response{
 		Code:    200,
 		Status:  "Ok",
-		Message: "Successfully found student!",
+		Message: "Successfully found teacher!",
 		Data:    res,
 	}
 
